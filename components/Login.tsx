@@ -10,19 +10,19 @@ type SignInDetails = {
 type SignUpDetails = SignInDetails & {
     fname: string
     lname: string
- 
+
 }
 
 const Login = () => {
     const client = new Client()
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
         .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID as string)
-    const {register:signUpRegister, handleSubmit} = useForm<SignUpDetails>()
-    const {register:signInRegister} = useForm<SignInDetails>()
+    const { register: signUpRegister, handleSubmit } = useForm<SignUpDetails>()
+    const { register: signInRegister,handleSubmit:loginHandleSubmit } = useForm<SignInDetails>()
 
 
 
-    const handleSignUp = (data:SignUpDetails) => {
+    const handleSignUp = (data: SignUpDetails) => {
         console.log(data)
         const account = new Account(client)
         account.create(
@@ -34,8 +34,16 @@ const Login = () => {
 
     }
 
-    const handleSignIn = (data:SignInDetails) => {
-        console.log(data)
+    const handleSignIn = (data: SignInDetails) => {
+        const account = new Account(client)
+        
+        const promise = account.createEmailSession(data.email, data.password);
+
+        promise.then(function (response) {
+            console.log(response)
+        }, function (error) {
+            alert(error)
+        });
     }
 
     return (
@@ -44,7 +52,7 @@ const Login = () => {
             <p className='text-lg w-[500px] text-white/40 text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, saepe?</p>
             <div className='flex gap-5 items-center mt-5 justify-evenly min-w-[700px]'>
 
-                <form className='p-4 flex flex-col gap-3'>
+                <form onSubmit={loginHandleSubmit(handleSignIn)} className='p-4 flex flex-col gap-3'>
                     <p className='text-sm font-semibold'>Sign In</p>
                     <input required {...signInRegister("email")} type="text" placeholder='email' className='primary-input' />
                     <input required {...signInRegister("password")} type="password" placeholder='password' className='primary-input' />
@@ -56,13 +64,13 @@ const Login = () => {
                 <form onSubmit={handleSubmit(handleSignUp)} className='p-4 flex flex-col gap-3'>
                     <p className='text-sm font-semibold'>Sign Up</p>
                     <div className='flex gap-3'>
-                        <input required type="text" {...signUpRegister("fname")} placeholder='first name' className='primary-input w-[calc(160px-.375rem)]' />
-                        <input required type="text" {...signUpRegister("lname")} placeholder='last name' className='primary-input w-[calc(160px-.375rem)]' />
+                        <input required type="text" {...signUpRegister("fname")} placeholder='first name' className='primary-input w-[calc(185px-.375rem)]' />
+                        <input required type="text" {...signUpRegister("lname")} placeholder='last name' className='primary-input w-[calc(185px-.375rem)]' />
                     </div>
                     <input required type="email" {...signUpRegister("email")} placeholder='email' className='primary-input' />
                     <div className='flex gap-3'>
-                        <input required type="password" {...signUpRegister("password")} placeholder='password' className='primary-input w-[calc(220px-.375rem)]' />
-                        <input type="submit" value="Sign Up" className='primary-input primary-gradient cursor-pointer trans  text-black font-semibold w-[calc(100px-.375rem)]' />
+                        <input required type="password" {...signUpRegister("password")} placeholder='password' className='primary-input w-[calc(270px-.375rem)]' />
+                        <input type="submit" value="Sign Up" className='primary-input primary-gradient p-0 cursor-pointer trans  text-black font-semibold w-[calc(100px-.375rem)]' />
                     </div>
 
                 </form>
