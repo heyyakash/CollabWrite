@@ -1,4 +1,5 @@
 import { Account, Client, ID } from 'appwrite'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -14,6 +15,7 @@ type SignUpDetails = SignInDetails & {
 }
 
 const Login = () => {
+    const router = useRouter()
     const client = new Client()
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
         .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID as string)
@@ -40,7 +42,7 @@ const Login = () => {
         const promise = account.createEmailSession(data.email, data.password);
 
         promise.then(function (response) {
-            console.log(response)
+            router.push("/dashboard")
         }, function (error) {
             alert(error)
         });
