@@ -28,12 +28,12 @@ const Canvas = ({color}:props) => {
     let lastX = 0;
     let lastY = 0;
 
-    const startDrawing = (e) => {
+    const startDrawing = (e:any) => {
       isDrawing = true;
       [lastX, lastY] = [e.clientX - rect.left, e.clientY - rect.top];
     };
 
-    const draw = (e) => {
+    const draw = (e:any) => {
       if (!isDrawing) return;
       context.beginPath();
       context.moveTo(lastX, lastY);
