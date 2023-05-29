@@ -37,8 +37,8 @@ const Dashboard = () => {
     return (
         <main className='bg-black relative text-white min-h-screen w-full'>
             <DashboardNav />
-            <section className='max-w-[1300px] w-full relative mx-auto pt-[150px] '>
-                <button className='border-[1px] border-white/20 bg-[#202020] text-white/50  p-2 px-3 font-[500] rounded-md hover:text-green-400 hover:border-green-400 trans'>New Project</button>
+            <section className='max-w-[1300px] w-full relative mx-auto pt-[120px] '>
+                <button className='border-[1px] border-white/20 bg-[#202020] text-white/50 text-sm  p-2 px-3 font-[500] rounded-md hover:text-green-400 hover:border-green-400 trans'>New Project</button>
             </section>
         </main>
     )

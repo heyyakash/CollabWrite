@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 
 type props = {
   color: string
+  shape: 'square' | 'circle' | null
 }
 
-const Canvas = ({color}:props) => {
+const Canvas = ({color,shape}:props) => {
 
   const canvasRef = useRef(null);
   const [currentState,setCurrentState] = useState(null)
@@ -13,8 +14,8 @@ const Canvas = ({color}:props) => {
     const canvas:any = canvasRef.current;
     const context = canvas.getContext("2d");
     const img = new Image();
-    canvas.width = 500;
-    canvas.height = 500;
+    canvas.width = 1000;
+    canvas.height = 700;
     // console.log(typeof data)
     if(currentState) context.putImageData(currentState , 0,0)
 
@@ -39,8 +40,8 @@ const Canvas = ({color}:props) => {
       context.moveTo(lastX, lastY);
       context.lineTo(e.clientX - rect.left, e.clientY - rect.top);
       context.stroke();
-      // console.log(context.getImageData(0,0,500,500))
-      setCurrentState(context.getImageData(0,0,500,500));
+      // console.log(context.getImageData(0,0,700,700))
+      setCurrentState(context.getImageData(0,0,1000,700));
       // console.log(canvas.toDataURL());
       [lastX, lastY] = [e.clientX - rect.left, e.clientY - rect.top];
     };
@@ -64,7 +65,7 @@ const Canvas = ({color}:props) => {
     };
   }, [color]);
 
-  return <canvas className={`bg-[white]`} ref={canvasRef} />;
+  return <canvas className={`bg-black`} ref={canvasRef} />;
 };
 
 export default Canvas;
