@@ -40,7 +40,7 @@ const Canvas = ({color,shape}:props) => {
       context.moveTo(lastX, lastY);
       context.lineTo(e.clientX - rect.left, e.clientY - rect.top);
       context.stroke();
-      // console.log(context.getImageData(0,0,700,700))
+      console.log(context.getImageData(0,0,1000,700))
       setCurrentState(context.getImageData(0,0,1000,700));
       // console.log(canvas.toDataURL());
       [lastX, lastY] = [e.clientX - rect.left, e.clientY - rect.top];
