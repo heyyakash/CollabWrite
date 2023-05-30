@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useQueries, useQuery, useQueryClient } from 'react-query'
 import DashboardNav from './DashboardNav'
+import Projects from './Projects'
 
 
 type document = {
@@ -77,6 +78,7 @@ const Dashboard = () => {
         databases.createDocument("6475e4e81155c46f87b6", "6475fafb1adfd9a909c5", ID.unique(), {
             from: data?.email,
             to: email,
+            from_name:data?.name,
             project_name: projectName,
             project_id:projectId
         })
@@ -123,7 +125,7 @@ const Dashboard = () => {
                         )
                     })}
                 </div> : (<></>)}
-
+                    <Projects />
             </section>
         </main>
     )

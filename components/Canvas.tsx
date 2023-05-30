@@ -16,10 +16,8 @@ const Canvas = ({color,shape}:props) => {
     const img = new Image();
     canvas.width = 1000;
     canvas.height = 700;
-    // console.log(typeof data)
     if(currentState) context.putImageData(currentState , 0,0)
 
-    // Set initial drawing styles
     context.strokeStyle = color;
     context.lineWidth = 2;
 
