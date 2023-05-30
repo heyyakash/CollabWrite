@@ -1,4 +1,4 @@
-import { Account, Client, ID } from 'appwrite'
+import { Account, Client, Databases, ID } from 'appwrite'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -19,26 +19,37 @@ const Login = () => {
     const client = new Client()
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
         .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID as string)
+    const account = new Account(client)
+    const databases = new Databases(client)
     const { register: signUpRegister, handleSubmit } = useForm<SignUpDetails>()
-    const { register: signInRegister,handleSubmit:loginHandleSubmit } = useForm<SignInDetails>()
+    const { register: signInRegister, handleSubmit: loginHandleSubmit } = useForm<SignInDetails>()
 
 
 
     const handleSignUp = (data: SignUpDetails) => {
         console.log(data)
-        const account = new Account(client)
         account.create(
             ID.unique(),
             data.email,
             data.password,
             data.fname.charAt(0).toUpperCase() + data.fname.slice(1) + " " + data.lname.charAt(0).toUpperCase() + data.lname.slice(1)
         )
+            .then((d) => {
+                databases.createDocument("6475e4e81155c46f87b6", "6475e4fa4c0ac8bdb6cc", ID.unique(), {
+                    email: data.email,
+                    uid: d["$id"],
+                    name: d["name"]
+                })
+                    .then(d => alert("Account Created Successfully"))
+                    .catch(err => console.log(err))
+            })
+            .catch((err) => console.log(err))
 
     }
 
     const handleSignIn = (data: SignInDetails) => {
-        const account = new Account(client)
-        
+
+
         const promise = account.createEmailSession(data.email, data.password);
 
         promise.then(function (response) {
