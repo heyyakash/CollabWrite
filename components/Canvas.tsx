@@ -32,7 +32,7 @@ const Canvas = ({ color, shape }: props) => {
 
 
   useEffect(() => {
-    const unsubscribe = client.subscribe(['databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.6476004ec7bb70ab3797', 'files'], (response:any) => {
+    const unsubscribe = client.subscribe([ `databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.${id}`, 'files'], (response:any) => {
       setImage(response.payload.data)
     });
     return ()=> unsubscribe()

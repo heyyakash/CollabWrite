@@ -24,7 +24,7 @@ const DashboardNav = () => {
         const promise = account.deleteSessions();
 
         promise.then(function (response) {
-            router.push("/login")
+            router.push("/")
         }, function (error) {
             alert(error) // Failure
         });
