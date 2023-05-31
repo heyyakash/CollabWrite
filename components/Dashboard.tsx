@@ -39,16 +39,12 @@ const Dashboard = () => {
     const databases = new Databases(client)
 
     const getClient = async () => {
-        try {
-            const promise = await account.get();
-            return promise
-        } catch (error) {
-            throw new Error()
-        }
+        const promise = await account.get();
+        return promise
     }
 
     const { data, isLoading } = useQuery<any>("userData", getClient, {
-        onError: () => router.push("/login")
+        onError: () => router.push("/")
     })
 
     const searchUser = (email: string) => {

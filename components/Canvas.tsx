@@ -1,6 +1,9 @@
 import { Client, Databases } from "appwrite";
+import { clear } from "console";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
+import { MdArrowBack } from "react-icons/md";
 import { useQueryClient } from "react-query";
 
 type props = {
@@ -20,9 +23,10 @@ const Canvas = ({ color, shape }: props) => {
   const projectData: any = queryClient.getQueryData("project")
 
   const setProject = async (data: any) => {
+    const { id } = router.query
     databases.updateDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id as string, {
       data: data.toString(),
-      edited_by: userData.email
+      edited_by: userData?.email
     }).then(d => console.log("Done")).catch(err => console.log(err))
   }
 
@@ -32,19 +36,17 @@ const Canvas = ({ color, shape }: props) => {
 
 
   useEffect(() => {
-    const unsubscribe = client.subscribe([ `databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.${id}`, 'files'], (response:any) => {
+    const unsubscribe = client.subscribe([`databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.${id}`, 'files'], (response: any) => {
       setImage(response.payload.data)
     });
-    return ()=> unsubscribe()
+    return () => unsubscribe()
   }, [])
 
 
   useEffect(() => {
     const canvas: any = canvasRef.current;
     const context = canvas.getContext("2d");
-    if(projectData?.data) setImage(projectData.data)
-    canvas.width = 1000;
-    canvas.height = 700;
+    if (projectData?.data && projectData?.data !=="null") setImage(projectData.data)
     if (currentState) {
       const image = new Image()
       image.onload = () => {
@@ -53,6 +55,9 @@ const Canvas = ({ color, shape }: props) => {
       image.src = currentState
     }
 
+    canvas.height = window.innerHeight
+    canvas.width = window.innerWidth * .75
+    context.height
     context.strokeStyle = color;
     context.lineWidth = 2;
 
@@ -64,17 +69,17 @@ const Canvas = ({ color, shape }: props) => {
 
     const startDrawing = (e: any) => {
       isDrawing = true;
-      [lastX, lastY] = [e.clientX - rect.left, e.clientY - rect.top];
+      [lastX, lastY] = [e.clientX, e.clientY];
     };
 
     const draw = (e: any) => {
       if (!isDrawing) return;
       context.beginPath();
       context.moveTo(lastX, lastY);
-      context.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      context.lineTo(e.clientX, e.clientY);
       context.stroke();
       setCurrentState(canvas.toDataURL());
-      [lastX, lastY] = [e.clientX - rect.left, e.clientY - rect.top];
+      [lastX, lastY] = [e.clientX, e.clientY];
     };
 
     const stopDrawing = () => {
@@ -98,10 +103,9 @@ const Canvas = ({ color, shape }: props) => {
     };
   }, [color]);
 
-  const setImage = (image:string) => {
+  const setImage = (image: string) => {
 
     const canvas: any = canvasRef.current
-    console.log("setimage", image)
     if (canvas) {
       const context = canvas.getContext("2d")
       if (image) {
@@ -114,7 +118,24 @@ const Canvas = ({ color, shape }: props) => {
     }
   }
 
-  return <canvas className={`bg-black`} ref={canvasRef} />;
+  const clearCanvas = () => {
+    const canvas: any = canvasRef.current
+    if (canvas) {
+      const context = canvas.getContext("2d")
+      context.clearRect(0,0,canvas.width,canvas.height)
+      setCurrentState(null)
+    }
+  }
+
+  return (
+    <>
+      <Link href =  "/dashboard" className = {`absolute left-3 rounded-md bg-white/20 top-2 text-white p-2`}>
+        <MdArrowBack />
+      </Link>
+      <button onClick={() => clearCanvas()} className="absolute bg-red-500 text-white font-bold trans hover:bg-white hover:text-red-500 cursor-pointer top-2 right-2 p-2 rounded-md">Clear</button>
+      <canvas className={`bg-black`} ref={canvasRef} />
+    </>
+  );
 };
 
 export default Canvas;

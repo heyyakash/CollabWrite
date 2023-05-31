@@ -6,6 +6,7 @@ import CanvasContainer from '@/components/CanvasContainer'
 import { useRouter } from 'next/router'
 import { Account, Client, Databases, Models } from 'appwrite'
 import { useQuery, useQueryClient } from 'react-query'
+import Chat from '@/components/Chat'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -20,7 +21,7 @@ export default function Home() {
 
 
   const getProject = async () => {
-    const { id } = router.query
+    const { id } =  router.query
     const data = await databases.getDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id as string)
     return data
   }
@@ -43,13 +44,14 @@ export default function Home() {
 
 
   if (isLoading) return <div className='w-full h-screen grid place-items-center'>Loading</div>
-  if (error) {
-    router.push("/dashboard")
-  }
+  // if (error) {
+  //   router.push("/dashboard")
+  // }
 
   return (
-    <>
+    <div className='flex'>
       <CanvasContainer />
-    </>
+      <Chat />
+    </div>
   )
 }
