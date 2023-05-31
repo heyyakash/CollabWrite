@@ -47,7 +47,7 @@ const Dashboard = () => {
         }
     }
 
-    const { data, isLoading } = useQuery("userData", getClient, {
+    const { data, isLoading } = useQuery<any>("userData", getClient, {
         onError: () => router.push("/login")
     })
 
@@ -63,7 +63,7 @@ const Dashboard = () => {
             const project_id = ID.unique()
             databases.createDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", project_id, {
                 admin: data?.email,
-                users: [data?.email],
+                users: [data["$id"]],
                 name: projectName
             })
                 .then(d => {

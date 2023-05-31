@@ -17,7 +17,7 @@ const DashboardNav = () => {
     const databases = new Databases(client)
     const router = useRouter()
     const queryClient = useQueryClient()
-    const userdata = queryClient.getQueryData("userData")
+    const userdata:any = queryClient.getQueryData("userData")
     // console.log(userdata)
 
     const handleLogOut = () => {
@@ -42,16 +42,9 @@ const DashboardNav = () => {
     }
 
 
-    const { data: invitations, error, isLoading } = useQuery("invitations", getInvitations)
+    const { data: invitations, error, isLoading } = useQuery<any>("invitations", getInvitations)
     // console.log(invitations)
 
-    const handleDelete = (id: string) => {
-        if (id) {
-            databases.deleteDocument('6475e4e81155c46f87b6', '6475fafb1adfd9a909c5', id)
-                .then(d => console.log("deleted"))
-                .catch(error => console.log(error))
-        }
-    }
 
     return (
         <nav className='h-[80px] fixed w-full bg-black z-[1000] border-b border-white/20'>
@@ -86,8 +79,9 @@ const DashboardNav = () => {
 
 
 const NotificationBox = ({ data }: any) => {
-    console.log(data)
+    // console.log(data)
     const queryClient = useQueryClient()
+    const userData:any = queryClient.getQueryData("userData")
     const client = new Client()
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
         .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID as string)
@@ -99,7 +93,7 @@ const NotificationBox = ({ data }: any) => {
 
     const acceptInvitation = async (id: string, invitation_id: string,useremail:string) => {
         databases.getDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id).then((d) => {
-            const arr = [...d.users, useremail]
+            const arr = [...d.users, userData["$id"]]
             databases.updateDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id, {
                 users: arr
             }).then(e => {
