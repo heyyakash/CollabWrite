@@ -8,8 +8,8 @@ const CanvasContainer = () => {
     const [shape, setShape] = useState<'square' | 'circle' | null>(null)
     const [color, setColor] = useState<string>("white")
     return (
-        <div className='w-full relative h-screen grid place-items-center bg-[#202020]'>
-            <div className='absolute bg-white/10 left-4 rounded-xl flex flex-col items-center gap-2 p-4'>
+        <div className=' relative h-screen  w-[75%] bg-[#202020]'>
+            <div className='absolute bg-white/10 left-4 rounded-xl top-[50%] -translate-y-[50%] flex flex-col items-center gap-2 p-4'>
                 <BsPenFill className="text-white my-2 " />
                 {list.map((x: string, i: number) => {
                     return (
