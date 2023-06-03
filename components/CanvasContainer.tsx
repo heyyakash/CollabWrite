@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import Canvas from './Canvas'
-import { BsCircle, BsPenFill } from 'react-icons/bs'
+import { BsCircle, BsEraser, BsPenFill, BsPencil } from 'react-icons/bs'
 import { BiSquare } from 'react-icons/bi'
 
 const CanvasContainer = () => {
     const list: string[] = ["tomato", "lightseagreen", "white", "grey", "hotpink", "red"]
-    const [shape, setShape] = useState<'square' | 'circle' | null>(null)
+    const [shape, setShape] = useState<'square' | 'circle' | 'erasure' |null>(null)
     const [color, setColor] = useState<string>("white")
     return (
         <div className=' relative h-screen  w-[75%] bg-[#202020]'>
@@ -20,17 +20,23 @@ const CanvasContainer = () => {
             </div>
 
             <div className='absolute text-xl flex p-3 items-center gap-3 top-2 left-[50%] -translate-x-[50%] bg-white/10 text-white rounded-md'>
-                <div onClick={()=>setShape("square")} className={`p-1 ${shape==="square"?"bg-white text-black":""}  cursor-pointer rounded-md`}>
+                <div onClick={() => setShape("square")} className={`p-1 ${shape === "square" ? "bg-white text-black" : ""}  cursor-pointer rounded-md`}>
                     <BiSquare />
                 </div>
-                <div onClick={()=>setShape("circle")} className={`p-1 ${shape==="circle"?"bg-white text-black":""}  cursor-pointer rounded-md`}>
-                <BsCircle className='cursor-pointer text-lg' />
+                <div onClick={() => setShape("circle")} className={`p-1 ${shape === "circle" ? "bg-white text-black" : ""}  cursor-pointer rounded-md`}>
+                    <BsCircle className='cursor-pointer text-lg' />
+                </div>
+                <div onClick={() => setShape(null)} className={`p-1 ${!shape ? "bg-white text-black" : ""}  cursor-pointer rounded-md`}>
+                    <BsPencil className='cursor-pointer text-lg' />
+                </div>
+                <div onClick={() => setShape("erasure")} className={`p-1 ${shape==="erasure" ? "bg-white text-black" : ""}  cursor-pointer rounded-md`}>
+                    <BsEraser className='cursor-pointer text-lg' />
                 </div>
 
-                
+
             </div>
 
-            <Canvas shape = {shape} color={color} />
+            <Canvas shape={shape} color={color} />
         </div>
     )
 }
