@@ -1,5 +1,6 @@
 import { Client, Databases } from "appwrite";
 import { clear } from "console";
+import jsPDF from "jspdf";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
@@ -32,7 +33,7 @@ const Canvas = ({ color, shape }: props) => {
     }
 
 
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const [currentState, setCurrentState] = useState(null)
 
 
@@ -41,8 +42,8 @@ const Canvas = ({ color, shape }: props) => {
         const unsubscribe = client.subscribe([`databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.${id}`, 'files'], (response: any) => {
             const userData: any = queryClient.getQueryData("userData")
             if (response.payload.edited_by !== userData.email) {
-                console.log("Changed")
-                console.log(response.payload.data)
+                // console.log("Changed")
+                // console.log(response.payload.data)
                 setImage(response.payload.data)
             }
         });
@@ -130,7 +131,7 @@ const Canvas = ({ color, shape }: props) => {
 
 
         const stopDrawing = () => {
-            console.log(canvas.toDataURL())
+            // console.log(canvas.toDataURL())
             setCurrentState(canvas.toDataURL());
             setProject(canvas.toDataURL())
             isDrawing = false;
@@ -181,12 +182,36 @@ const Canvas = ({ color, shape }: props) => {
         }
     }
 
+    const downlaodPdf = () => {
+        const canvas = canvasRef.current as HTMLCanvasElement | null;
+
+        if (canvas) {
+            const context = canvas?.getContext("2d");
+            if (context) {
+                const pdf = new jsPDF();
+                const imageData = canvas.toDataURL('image/jpeg');
+                console.log(imageData)
+              
+                pdf.addImage(imageData, 'JPEG', 0, 0, window.innerWidth*.75, window.innerHeight);
+                pdf.save('canvasToPdf.pdf');
+              
+            }
+        }
+
+
+
+    }
+
     return (
         <>
             <Link href="/dashboard" className={`absolute left-3 rounded-md bg-white/20 top-2 text-white p-2`}>
                 <MdArrowBack />
             </Link>
-            <button onClick={() => clearCanvas()} className="absolute bg-red-500 text-white font-bold trans hover:bg-white hover:text-red-500 cursor-pointer top-2 right-2 p-2 rounded-md">Clear</button>
+            <div className="flex absolute gap-2 top-2 right-2 p-2">
+                <button onClick={()=>downlaodPdf()} className="bg-blue-500 p-1 text-white font-bold rounded-md px-2" >PNG</button>
+                <button onClick={() => clearCanvas()} className=" bg-red-500 text-white px-2 font-bold trans hover:bg-white hover:text-red-500 cursor-pointer  rounded-md">Clear</button>
+            </div>
+
             <canvas className={`bg-black`} ref={canvasRef} />
         </>
     );

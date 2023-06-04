@@ -48,13 +48,14 @@ const DashboardNav = () => {
 
     return (
         <nav className='h-[80px] fixed w-full bg-black z-[1000] border-b border-white/20'>
-            <div className='h-full mx-auto max-w-[1300px] flex items-center justify-between'>
+            <div className='h-full mx-auto max-w-[1200px] flex items-center justify-between'>
                 <div className="flex items-center gap-2">
                     <MdHandshake className='text-3xl' />
                     <h3 className='font-bold primary-gradient text-transparent bg-clip-text'>Collaborate</h3>
                 </div>
                 <div className='flex text-xl trans text-white/50 items-center cursor-pointer  gap-2'>
                     <div className='trans hover:bg-white/20 p-2 rounded-full relative'>
+                        {invitations?.length>0 && <div className='bg-red-500 h-1 rounded-full w-1 absolute right-2'></div>}
                         <BiBell onClick={() => setShow(!show)} className='hover:text-white trans' />
                         <div className={`${show ? "flex" : "hidden"} flex-col p-2 rounded-xl   absolute w-[500px] min-h-[100px] bg-black border-[1px] border-white/20 left-[-15rem] top-10`}>
                             {!isLoading && !error ?

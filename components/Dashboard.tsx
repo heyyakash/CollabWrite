@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useQueries, useQuery, useQueryClient } from 'react-query'
 import DashboardNav from './DashboardNav'
 import Projects from './Projects'
-
+import {AiOutlineArrowRight} from 'react-icons/ai'
 
 type document = {
     email: string;
@@ -19,8 +19,8 @@ type document = {
 }
 
 type inviationType = {
-    name:string,
-    email:string
+    name: string,
+    email: string
 }
 
 const Dashboard = () => {
@@ -28,9 +28,11 @@ const Dashboard = () => {
     const [show, setShow] = useState<boolean>(false)
     const [invitations, setInvitations] = useState<inviationType[]>([])
     const [input, setInput] = useState<string>("")
-    const [projectId,setProjectId] = useState<string>("")
+    const [projectId, setProjectId] = useState<string>("")
     const [projectName, setProjectName] = useState<string>("")
     const [searchResult, setSearchResult] = useState<any>([])
+    const queryClient = useQueryClient()
+    const projects : any= queryClient.getQueryData("projects")
 
     const client = new Client()
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
@@ -70,18 +72,18 @@ const Dashboard = () => {
         }
     }
 
-    const sendInvitation = (email:string, name:string) => {
+    const sendInvitation = (email: string, name: string) => {
         databases.createDocument("6475e4e81155c46f87b6", "6475fafb1adfd9a909c5", ID.unique(), {
             from: data?.email,
             to: email,
-            from_name:data?.name,
+            from_name: data?.name,
             project_name: projectName,
-            project_id:projectId
+            project_id: projectId
         })
             .then(d => {
                 console.log(d)
                 setSearchResult([])
-                setInvitations(((invitations)=>[...invitations, {name, email}]))
+                setInvitations(((invitations) => [...invitations, { name, email }]))
             })
             .catch(err => console.log(err))
     }
@@ -98,8 +100,22 @@ const Dashboard = () => {
     return (
         <main className='bg-black relative text-white min-h-screen w-full'>
             <DashboardNav />
-            <section className='max-w-[1300px] w-full relative mx-auto pt-[120px] '>
-                <button onClick={() => setShow(true)} className='border-[1px] border-white/20 bg-[#202020] text-white/50 text-sm  p-2 px-3 font-[500] rounded-md hover:text-green-400 hover:border-green-400 trans'>New Project</button>
+            <section className='max-w-[1200px] w-full relative mx-auto pt-[120px] '>
+                <div className='grid gap-6 grid-cols-4'>
+                    <div className='p-6 first:col-span-2'><span className='text-xl leading-2 font-semibold text-white/70 bg-clip-text primary-gradient text-transparent'>Hello</span><span className='text-white text-[3rem] font-semibold block'>{data.name} 👋</span></div>
+                    <div className="flex items-center justify-center  h-[130px] rounded-lg primary-gradient">
+                        <p className='text-[3rem] font-semibold text-black'>{projects?.length}<span className='text-sm'>Projects</span></p>
+                    </div>
+                    <div className="flex items-center justify-center  h-[130px] rounded-lg primary-gradient p-1">
+                        <div className='bg-black w-full h-full rounded-lg cursor-pointer flex items-center justify-center gap-2'>
+                            <p className='font-[500] text-2xl'>New Project</p>
+                            <AiOutlineArrowRight className='text-2xl' />
+                        </div>
+                        {/* <p className='text-[3rem] font-semibold text-black'>{projects?.length}</p> */}
+                    </div>
+                </div>
+
+                {/* <button onClick={() => setShow(true)} className='border-[1px] border-white/20 bg-[#202020] text-white/50 text-sm  p-2 px-3 font-[500] rounded-md hover:text-green-400 hover:border-green-400 trans'>New Project</button>
                 {show && (
                     <div className='block mt-5'>
                         <div className='flex items-center gap-3'>
@@ -120,8 +136,8 @@ const Dashboard = () => {
                             </div>
                         )
                     })}
-                </div> : (<></>)}
-                    <Projects />
+                </div> : (<></>)} */}
+                <Projects />
             </section>
         </main>
     )

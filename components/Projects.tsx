@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 
 const Projects = () => {
-    
+
 
     const client = new Client()
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
@@ -23,12 +23,18 @@ const Projects = () => {
 
 
     return (
-        <section className='my-4'>
-            <h2 className='text-xl font-bold'>Projects</h2>
-            <div className='flex flex-wrap items-center gap-3 mt-4'>
-                {!error && projects?.map((x)=><Link href={`/projects/${x["$id"]}`} key = {x["$id"]} className='h-[130px] trans  hover:scale-110  rounded-md bg-white/20 w-[130px] text-white grid place-items-center bg-white cursor-pointer font-bold'>{x.name}</Link>)}    
+        <section className='my-[3rem] bg-white/10 p-6  rounded-lg drop-shadow-xl'>
+            <h2 className='text-xl font-semibold'>Your Projects</h2>
+            <div className='flex flex-wrap items-center gap-6 mt-8'>
+                {!error && projects?.map((x) =>
+                    <Link href={`/projects/${x["$id"]}`} key={x["$id"]} className={`h-[130px] trans relative  hover:scale-110  rounded-lg bg-black group border-b-2 border-green-400 w-[130px]  text-white grid place-items-center  cursor-pointer font-bold`}>
+                        <div className='w-full h-full relative group overflow-hidden'>
+                            <div className='absolute z-10 text-sm absolute-center opacity-0 group-hover:opacity-100 trans'>{x.name}</div>
+                            <img src={x.data} alt="canvas" className='relative group-hover:opacity-25 trans' />
+                        </div>
+                    </Link>)}
             </div>
-            
+
         </section>
     )
 }
