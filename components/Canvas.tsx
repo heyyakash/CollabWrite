@@ -203,7 +203,9 @@ const Canvas = ({ color, shape }: props) => {
 
 
     }
-    if(!isLoading)
+    if(isLoading){
+        return(<></>)
+    }
     return (
         <>
             <Link href="/dashboard" className={`absolute left-3 rounded-md bg-white/20 top-2 text-white p-2`}>
