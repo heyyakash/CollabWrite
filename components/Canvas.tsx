@@ -21,9 +21,7 @@ const Canvas = ({ color, shape }: props) => {
     const queryClient = useQueryClient()
 
     const projectData: any = queryClient.getQueryData("project")
-    const { data, isLoading } = useQuery<any>("userData", () => getClient(account), {
-        onError: () => router.push("/")
-    })
+    const data:any = queryClient.getQueryData("userData")
 
     const setProject = async (data: any) => {
         const userData: any = queryClient.getQueryData("userData")
@@ -44,8 +42,6 @@ const Canvas = ({ color, shape }: props) => {
         const unsubscribe = client.subscribe([`databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.${id}`, 'files'], (response: any) => {
 
             if (response.payload.edited_by !== data.email) {
-                // console.log("Changed")
-                // console.log(response.payload.data)
                 setImage(response.payload.data)
             }
         });
@@ -178,9 +174,10 @@ const Canvas = ({ color, shape }: props) => {
         if (canvas) {
             const context = canvas.getContext("2d")
             context.clearRect(0, 0, canvas.width, canvas.height)
-            context.drawImage(canvas, 0, 0);
-            setCurrentState(canvas.toDataURL())
+            context.drawImage(canvas, 0, 0)
             setProject(canvas.toDataURL())
+            setCurrentState(canvas.toDataURL())
+            
         }
     }
 
@@ -194,7 +191,7 @@ const Canvas = ({ color, shape }: props) => {
                 const imageData = canvas.toDataURL('image/jpeg');
                 console.log(imageData)
 
-                pdf.addImage(imageData, 'JPEG', 0, 0, window.innerWidth * .75, window.innerHeight);
+                pdf.addImage(canvas, 'JPEG', 5,50,200,200);
                 pdf.save('canvasToPdf.pdf');
 
             }
@@ -203,9 +200,9 @@ const Canvas = ({ color, shape }: props) => {
 
 
     }
-    if(isLoading){
-        return(<></>)
-    }
+    // if(isLoading){
+    //     return(<></>)
+    // }
     return (
         <>
             <Link href="/dashboard" className={`absolute left-3 rounded-md bg-white/20 top-2 text-white p-2`}>
