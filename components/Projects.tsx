@@ -1,38 +1,71 @@
+import getProjects from '@/helpers/db_functions'
+import deleteProject from '@/helpers/deleteProjects'
+import getInitialClient from '@/helpers/getClient'
 import { Account, Client, Databases, Models, Query } from 'appwrite'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
+import { BsFillTrash2Fill } from 'react-icons/bs'
+import { RxCross2 } from 'react-icons/rx'
 import { useQuery, useQueryClient } from 'react-query'
 
-const Projects = () => {
+type propTypes = {
+    show: boolean,
+    setShow: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+type projectType = {
+    name: string;
+    users?: (string)[] | null;
+    admin: string;
+    edited_by: string;
+    data: string;
+    $id: string;
+    $createdAt: string;
+    $updatedAt: string;
+    $permissions?: (string)[] | null;
+    $collectionId: string;
+    $databaseId: string;
+}
 
 
-    const client = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID as string)
-    const databases = new Databases(client)
+const Projects = ({ show, setShow }: propTypes) => {
+    const { client, account, databases } = getInitialClient()
     const queryClient = useQueryClient()
     const userData: any = queryClient.getQueryData("userData")
 
 
-    const getProjects = async () => {
-        const data = await databases.listDocuments("6475e4e81155c46f87b6", "6475f82bb6f201570328", [Query.search("users", userData["$id"])])
-        return data.documents
+
+    const { data: projects, error, isLoading } = useQuery<(Models.Document)[]>("projects", () => getProjects(databases, userData["$id"]))
+
+    if(isLoading){
+        return(
+            <section className='my-[3rem] bg-white/10 p-6  h-[170px] rounded-lg drop-shadow-xl animate-pulse'></section>    
+        )
     }
-
-    const { data: projects, error, isLoading } = useQuery<Models.Document[]>("projects", getProjects)
-
-
     return (
-        <section className='my-[3rem] bg-white/10 p-6  rounded-lg drop-shadow-xl'>
-            <h2 className='text-xl font-semibold'>Your Projects</h2>
+        <section className='my-[3rem] pb-[1.75rem] bg-white/10 p-6   rounded-lg drop-shadow-xl'>
+            <h2 className='text-xl font-semibold'>Your Drawing Boards</h2>
             <div className='flex flex-wrap items-center gap-6 mt-8'>
                 {!error && projects?.map((x) =>
-                    <Link href={`/projects/${x["$id"]}`} key={x["$id"]} className={`h-[130px] trans relative  hover:scale-110  rounded-lg bg-black group border-b-2 border-green-400 w-[130px]  text-white grid place-items-center  cursor-pointer font-bold`}>
-                        <div className='w-full h-full relative group overflow-hidden'>
-                            <div className='absolute z-10 text-sm absolute-center opacity-0 group-hover:opacity-100 trans'>{x.name}</div>
-                            <img src={x.data} alt="canvas" className='relative group-hover:opacity-25 trans' />
+                    <div key={x["$id"]} className='relative group'>
+                        <div onClick={() => deleteProject(x,userData,queryClient)} className='hover:text-red-500 cursor-pointer text-xl trans absolute top-2 right-2 hidden group-hover:block z-[100]'>
+                            <RxCross2 />
                         </div>
-                    </Link>)}
+
+                        <Link href={`/projects/${x["$id"]}`}  className={`h-[130px] trans relative  hover:scale-110  rounded-lg bg-black group border-b-2 border-green-400 w-[130px]  text-white grid place-items-center  cursor-pointer font-bold`}>
+                            <div className='w-full h-full relative group overflow-hidden'>
+
+                                <div className='absolute z-10 text-sm absolute-center opacity-0 group-hover:opacity-100 trans'>{x.name}</div>
+                                <img src={x?.data} className='relative group-hover:opacity-25 trans' />
+                            </div>
+                        </Link>
+                    </div>)}
+
+                <div onClick={() => setShow(!show)} className={`h-[130px] trans relative  hover:scale-110  rounded-lg bg-black group bg-green-400/80 w-[130px]  text-white grid place-items-center  cursor-pointer font-bold`}>
+                    <p className='text-[3rem]'>+</p>
+
+                </div>
+
             </div>
 
         </section>

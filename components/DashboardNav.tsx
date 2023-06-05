@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { TiTick } from 'react-icons/ti'
 import { RxCross2 } from 'react-icons/rx'
 import { useQuery, useQueryClient } from 'react-query'
+import getInitialClient from '@/helpers/getClient'
 
 const DashboardNav = () => {
     const [show, setShow] = useState<boolean>(false)
@@ -83,11 +84,7 @@ const NotificationBox = ({ data }: any) => {
     // console.log(data)
     const queryClient = useQueryClient()
     const userData:any = queryClient.getQueryData("userData")
-    const client = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID as string)
-    const account = new Account(client)
-    const databases = new Databases(client)
+    const {client, account, databases} = getInitialClient()
     const deleteInvitaion = (id: string) => {
         databases.deleteDocument("6475e4e81155c46f87b6", "6475fafb1adfd9a909c5", id).then((e) => queryClient.invalidateQueries("invitations"))
     }
@@ -100,7 +97,7 @@ const NotificationBox = ({ data }: any) => {
             }).then(e => {
                 deleteInvitaion(invitation_id)
             }).catch(err => console.log(err))
-        }).then(e => console.log("done")).catch(err => console.log(err))
+        }).then(e => queryClient.invalidateQueries("projects")).catch(err => console.log(err))
     }
 
     return (

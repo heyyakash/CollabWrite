@@ -1,3 +1,5 @@
+import getInitialClient from "@/helpers/getClient";
+import getClient from "@/helpers/getUser";
 import { Client, Databases } from "appwrite";
 import { clear } from "console";
 import jsPDF from "jspdf";
@@ -5,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
-import { useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 type props = {
     color: string
@@ -15,13 +17,13 @@ type props = {
 const Canvas = ({ color, shape }: props) => {
     const router = useRouter()
     const { id } = router.query
-    const client = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID as string)
-    const databases = new Databases(client)
+    const {client , account , databases} = getInitialClient()
     const queryClient = useQueryClient()
 
     const projectData: any = queryClient.getQueryData("project")
+    const { data, isLoading } = useQuery<any>("userData", () => getClient(account), {
+        onError: () => router.push("/")
+    })
 
     const setProject = async (data: any) => {
         const userData: any = queryClient.getQueryData("userData")
@@ -40,8 +42,8 @@ const Canvas = ({ color, shape }: props) => {
     useEffect(() => {
         setCurrentState(null)
         const unsubscribe = client.subscribe([`databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.${id}`, 'files'], (response: any) => {
-            const userData: any = queryClient.getQueryData("userData")
-            if (response.payload.edited_by !== userData.email) {
+
+            if (response.payload.edited_by !== data.email) {
                 // console.log("Changed")
                 // console.log(response.payload.data)
                 setImage(response.payload.data)
@@ -191,24 +193,24 @@ const Canvas = ({ color, shape }: props) => {
                 const pdf = new jsPDF();
                 const imageData = canvas.toDataURL('image/jpeg');
                 console.log(imageData)
-              
-                pdf.addImage(imageData, 'JPEG', 0, 0, window.innerWidth*.75, window.innerHeight);
+
+                pdf.addImage(imageData, 'JPEG', 0, 0, window.innerWidth * .75, window.innerHeight);
                 pdf.save('canvasToPdf.pdf');
-              
+
             }
         }
 
 
 
     }
-
+    if(!isLoading)
     return (
         <>
             <Link href="/dashboard" className={`absolute left-3 rounded-md bg-white/20 top-2 text-white p-2`}>
                 <MdArrowBack />
             </Link>
             <div className="flex absolute gap-2 top-2 right-2 p-2">
-                <button onClick={()=>downlaodPdf()} className="bg-blue-500 p-1 text-white font-bold rounded-md px-2" >PNG</button>
+                <button onClick={() => downlaodPdf()} className="bg-blue-500 p-1 text-white font-bold rounded-md px-2" >PNG</button>
                 <button onClick={() => clearCanvas()} className=" bg-red-500 text-white px-2 font-bold trans hover:bg-white hover:text-red-500 cursor-pointer  rounded-md">Clear</button>
             </div>
 
