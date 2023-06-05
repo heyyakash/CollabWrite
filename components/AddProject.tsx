@@ -111,7 +111,7 @@ const AddProject = ({ show, setShow }: propTypes) => {
                                 {
                                     invitations.map((x: { name: string, email: string }) => {
                                         return (
-                                            <div className='bg-white flex items-center rounded-md p-2 text-black font-semibold '>{x.email} <p className='ml-2 text-sm font-normal'>(Invitaion sent)</p></div>
+                                            <div key = {x.email} className='bg-white flex items-center rounded-md p-2 text-black font-semibold '>{x.email} <p className='ml-2 text-sm font-normal'>(Invitaion sent)</p></div>
                                         )
                                     })
                                 }
