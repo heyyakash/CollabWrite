@@ -20,8 +20,8 @@ export default function Home() {
   const databases = new Databases(client)
 
 
-  const getProject = async () => {
-    const { id } =  router.query
+  const getProject = async (id:string) => {
+
     const data = await databases.getDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id as string)
     return data
   }
@@ -40,7 +40,7 @@ export default function Home() {
   })
  
 
-  const { data: project, error, isLoading } = useQuery("project", getProject)
+  const { data: project, error, isLoading } = useQuery("project", ()=>getProject(id as string))
 
 
   if (isLoading) return <div className='w-full h-screen grid place-items-center'>Loading</div>
@@ -49,7 +49,7 @@ export default function Home() {
   // }
 
   return (
-    <div className='flex bg-[url("/pattern.png")] bg-repeat bg-contain'>
+    <div className='flex relative bg-[url("/pattern.png")] bg-repeat bg-contain'>
       <CanvasContainer />
       <Chat />
     </div>

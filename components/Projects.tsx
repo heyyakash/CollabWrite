@@ -43,7 +43,7 @@ const Projects = ({ show, setShow }: propTypes) => {
         )
     }
     return (
-        <section className='my-[3rem] pb-[1.75rem] bg-white/10 p-6   rounded-lg drop-shadow-xl'>
+        <section className='my-[3rem] pb-[1.75rem] bg-white/10 p-6 bg-[url("/pattern2.png")]   rounded-lg drop-shadow-xl'>
             <h2 className='text-xl font-semibold'>Your Drawing Boards</h2>
             <div className='flex flex-wrap items-center gap-6 mt-8'>
                 {!error && projects?.map((x) =>
@@ -52,7 +52,7 @@ const Projects = ({ show, setShow }: propTypes) => {
                             <RxCross2 />
                         </div>
 
-                        <Link href={`/projects/${x["$id"]}`}  className={`h-[130px] trans relative  hover:scale-110  rounded-lg bg-black group border-b-2 border-green-400 w-[130px]  text-white grid place-items-center  cursor-pointer font-bold`}>
+                        <Link href={`/projects/${x["$id"]}`}  className={`h-[130px] trans relative  hover:scale-110  rounded-tr-lg rounded-tl-lg bg-black group border-b-2 border-green-300 w-[130px]  text-white grid place-items-center  cursor-pointer font-bold`}>
                             <div className='w-full h-full relative group overflow-hidden'>
 
                                 <div className='absolute z-10 text-sm absolute-center opacity-0 group-hover:opacity-100 trans'>{x.name}</div>
