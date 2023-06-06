@@ -49,7 +49,7 @@ export default function Home() {
   // }
 
   return (
-    <div className='flex'>
+    <div className='flex bg-[url("/pattern.png")] bg-repeat bg-contain'>
       <CanvasContainer />
       <Chat />
     </div>
