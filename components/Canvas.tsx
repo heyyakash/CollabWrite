@@ -9,6 +9,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { useQuery, useQueryClient } from "react-query";
 
+
 type props = {
     color: string
     shape: 'square' | 'circle' | 'erasure' | null
@@ -17,11 +18,11 @@ type props = {
 const Canvas = ({ color, shape }: props) => {
     const router = useRouter()
     const { id } = router.query
-    const {client , account , databases} = getInitialClient()
+    const { client, account, databases } = getInitialClient()
     const queryClient = useQueryClient()
 
     const projectData: any = queryClient.getQueryData("project")
-    const data:any = queryClient.getQueryData("userData")
+    const data: any = queryClient.getQueryData("userData")
 
     const setProject = async (data: any) => {
         const userData: any = queryClient.getQueryData("userData")
@@ -33,8 +34,8 @@ const Canvas = ({ color, shape }: props) => {
     }
 
 
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [currentState, setCurrentState] = useState(null)
+    // const canvasRef = useRef<HTMLCanvasElement>(null);
+    // const [currentState, setCurrentState] = useState(null)
 
 
     useEffect(() => {
@@ -49,135 +50,241 @@ const Canvas = ({ color, shape }: props) => {
     }, [])
 
 
+    // useEffect(() => {
+    //     const canvas: any = canvasRef.current;
+    //     const context = canvas.getContext("2d");
+    //     if (projectData?.data && projectData?.data !== "null") setImage(projectData.data)
+    //     if (currentState) {
+    //         const image = new Image()
+    //         image.onload = () => {
+    //             context.drawImage(image, 0, 0)
+    //         }
+    //         image.src = currentState
+    //     }
+
+    //     canvas.height = window.innerHeight
+    //     canvas.width = window.innerWidth * .75
+    //     context.height
+    //     context.strokeStyle = color;
+    //     context.lineWidth = 2;
+
+    //     let isDrawing = false;
+    //     let lastX = 0;
+    //     let lastY = 0;
+    //     let currentX = 0;
+    //     let currentY = 0;
+    //     const eraserSize = 50;
+    //     const rect = canvas.getBoundingClientRect();
+
+    //     const startDrawing = (e: any) => {
+    //         isDrawing = true;
+    //         [lastX, lastY] = [e.clientX, e.clientY];
+    //         [currentX, currentY] = [e.clientX, e.clientY];
+    //     };
+
+    //     const draw = (e: any) => {
+    //         if (!isDrawing) return;
+
+
+
+    //         if (shape === "square") {
+    //             [currentX, currentY] = [e.clientX, e.clientY];
+    //             const width = (currentX - lastX);
+    //             const height = (currentY - lastY);
+    //             context.beginPath();
+    //             console.log(width, height)
+    //             context.rect(lastX, lastY, width, height);
+    //             context.stroke();
+    //             context.fill()
+    //         }
+    //         else if (shape === "circle") {
+    //             [currentX, currentY] = [e.clientX, e.clientY];
+    //             const radius = Math.sqrt(
+    //                 Math.pow(currentX - lastX, 2) + Math.pow(currentY - lastY, 2)
+    //             );
+    //             context.beginPath();
+    //             context.arc(lastX, lastY, radius, 0, 2 * Math.PI);
+    //             context.stroke();
+    //             context.fill();
+    //         }
+
+    //         else if (shape === "erasure") {
+    //             // Calculate the position within the canvas
+    //             const rect = canvas.getBoundingClientRect();
+    //             const x = e.clientX - rect.left;
+    //             const y = e.clientY - rect.top;
+
+    //             // Use the eraser to clear a portion of the canvas
+    //             context.clearRect(x - eraserSize / 2, y - eraserSize / 2, eraserSize, eraserSize);
+    //         }
+
+    //         else {
+    //             context.beginPath();
+    //             context.moveTo(lastX, lastY);
+    //             context.lineTo(e.clientX, e.clientY);
+    //             context.stroke();
+    //             [lastX, lastY] = [e.clientX, e.clientY];
+    //         }
+
+    //     };
+
+
+    //     const stopDrawing = () => {
+    //         // console.log(canvas.toDataURL())
+    //         setCurrentState(canvas.toDataURL());
+    //         setProject(canvas.toDataURL())
+    //         isDrawing = false;
+    //     };
+
+    //     // Add event listeners to track mouse movement
+    //     canvas.addEventListener("mousedown", startDrawing);
+    //     canvas.addEventListener("mousemove", draw);
+    //     canvas.addEventListener("mouseup", stopDrawing);
+    //     canvas.addEventListener("mouseout", stopDrawing);
+
+    //     return () => {
+    //         // Cleanup: remove event listeners when the component unmounts
+    //         canvas.removeEventListener("mousedown", startDrawing);
+    //         canvas.removeEventListener("mousemove", draw);
+    //         canvas.removeEventListener("mouseup", stopDrawing);
+    //         canvas.removeEventListener("mouseout", stopDrawing);
+    //     };
+    // }, [color, shape]);
+
+
+
+
+    // }
+    // // if(isLoading){
+    // //     return(<></>)
+    // // }
+
+
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+    const [currentState, setCurrentState] = useState<string | null>(null)
+    const cursorRef = useRef<HTMLDivElement>(null)
+    const [isDrawing, setIsDrawing] = useState<boolean>(false)
+    const [lastX, setLastX] = useState<number>(0)
+    const [lastY, setLastY] = useState<number>(0)
+    const [currentX, setCurrentX] = useState<number>(0)
+    const [currentY, setCurrentY] = useState<number>(0)
+    const [elemArr, setElemArr] = useState<elements[]>([])
+    const [cursor, setCursor] = useState<boolean>(false)
+    type elements = {
+        width?: number,
+        height?: number,
+        lastX: number,
+        lastY: number,
+        radius?: number
+    }
+
+
     useEffect(() => {
-        const canvas: any = canvasRef.current;
-        const context = canvas.getContext("2d");
-        if (projectData?.data && projectData?.data !== "null") setImage(projectData.data)
-        if (currentState) {
-            const image = new Image()
-            image.onload = () => {
-                context.drawImage(image, 0, 0)
+        const canvas: HTMLCanvasElement | null = canvasRef.current
+        if (canvas) {
+            const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
+            if (context) {
+                canvas.height = window.innerHeight
+                canvas.width = window.innerWidth * .75;
+                context.clearRect(0, 0, canvas.width, canvas.height)
+                if (projectData?.data && projectData?.data !== "null") setImage(projectData.data)
             }
-            image.src = currentState
+        }
+    }, [])
+
+    const startDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+        setIsDrawing(true)
+        setCursor(true)
+        setLastX(e.clientX)
+        setLastY(e.clientY)
+        setCurrentX(e.clientX)
+        setCurrentY(e.clientY)
+    }
+
+    const draw = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+        if (!isDrawing) return;
+        const cursor = cursorRef.current
+        if (cursor) {
+            cursor.style.backgroundColor = "green"
+        }
+        const canvas: HTMLCanvasElement | null = canvasRef.current
+        if (canvas) {
+
+            const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
+            if (context) {
+                if (shape === "square") {
+                    setCurrentX(e.clientX)
+                    setCurrentY(e.clientY)
+                    const width = (currentX - lastX)
+                    const height = (currentY - lastY)
+                    setElemArr((elemArr) => [...elemArr, { lastX, lastY, width, height }])
+
+                }
+
+                else if (shape === "circle") {
+                    setCurrentX(e.clientX)
+                    setCurrentY(e.clientY)
+                    const radius = Math.sqrt(
+                        Math.pow(currentX - lastX, 2) + Math.pow(currentY - lastY, 2)
+                    );
+                    setElemArr((elemArr) => [...elemArr, { lastX, lastY, radius }])
+                }
+
+                else if (shape === "erasure") {
+                    const eraserSize = 50
+                    const rect = canvas.getBoundingClientRect()
+                    const x = e.clientX - rect.left
+                    const y = e.clientY - rect.top
+                    context.clearRect(x - eraserSize / 2, y - eraserSize / 2, eraserSize, eraserSize);
+                }
+
+                else {
+                    setCurrentX(e.clientX)
+                    setCurrentY(e.clientY)
+                    const { clientX, clientY } = e
+                    setElemArr((elemArr) => [...elemArr, { lastX, lastY, clientX, clientY }])
+                    context.lineWidth = 2;
+                    context.strokeStyle = color;
+
+                }
+            }
         }
 
-        canvas.height = window.innerHeight
-        canvas.width = window.innerWidth * .75
-        context.height
-        context.strokeStyle = color;
-        context.lineWidth = 2;
 
-        let isDrawing = false;
-        let lastX = 0;
-        let lastY = 0;
-        let currentX = 0;
-        let currentY = 0;
-        const eraserSize = 50;
-        const rect = canvas.getBoundingClientRect();
-
-        const startDrawing = (e: any) => {
-            isDrawing = true;
-            [lastX, lastY] = [e.clientX, e.clientY];
-            [currentX, currentY] = [e.clientX, e.clientY];
-        };
-
-        const draw = (e: any) => {
-            if (!isDrawing) return;
-
-
-
-            if (shape === "square") {
-                [currentX, currentY] = [e.clientX, e.clientY];
-                const width = (currentX - lastX);
-                const height = (currentY - lastY);
-                context.beginPath();
-                console.log(width, height)
-                context.rect(lastX, lastY, width, height);
-                context.stroke();
-                context.fill()
-            }
-            else if (shape === "circle") {
-                [currentX, currentY] = [e.clientX, e.clientY];
-                const radius = Math.sqrt(
-                    Math.pow(currentX - lastX, 2) + Math.pow(currentY - lastY, 2)
-                );
-                context.beginPath();
-                context.arc(lastX, lastY, radius, 0, 2 * Math.PI);
-                context.stroke();
-                context.fill();
-            }
-
-            else if (shape === "erasure") {
-                // Calculate the position within the canvas
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                // Use the eraser to clear a portion of the canvas
-                context.clearRect(x - eraserSize / 2, y - eraserSize / 2, eraserSize, eraserSize);
-            }
-
-            else {
-                context.beginPath();
-                context.moveTo(lastX, lastY);
-                context.lineTo(e.clientX, e.clientY);
-                context.stroke();
-                [lastX, lastY] = [e.clientX, e.clientY];
-            }
-
-        };
-
-
-        const stopDrawing = () => {
-            // console.log(canvas.toDataURL())
-            setCurrentState(canvas.toDataURL());
-            setProject(canvas.toDataURL())
-            isDrawing = false;
-        };
-
-        // Add event listeners to track mouse movement
-        canvas.addEventListener("mousedown", startDrawing);
-        canvas.addEventListener("mousemove", draw);
-        canvas.addEventListener("mouseup", stopDrawing);
-        canvas.addEventListener("mouseout", stopDrawing);
-
-        return () => {
-            // Cleanup: remove event listeners when the component unmounts
-            canvas.removeEventListener("mousedown", startDrawing);
-            canvas.removeEventListener("mousemove", draw);
-            canvas.removeEventListener("mouseup", stopDrawing);
-            canvas.removeEventListener("mouseout", stopDrawing);
-        };
-    }, [color, shape]);
+    }
 
     const setImage = (image: string) => {
 
-        const canvas: any = canvasRef.current
+        const canvas = canvasRef.current
         if (canvas) {
 
             const context = canvas.getContext("2d")
-            context.clearRect(0, 0, canvas.width, canvas.height)
-            if (image.length > 0) {
-                const img = new Image()
-                img.onload = () => {
-                    context.drawImage(img, 0, 0)
+            if (context) {
+                context.clearRect(0, 0, canvas.width, canvas.height)
+                if (image.length > 0) {
+                    const img = new Image()
+                    img.onload = () => {
+                        context.drawImage(img, 0, 0)
+                    }
+                    img.src = image
+                    return
                 }
-                img.src = image
-                return
+                context.clearRect(0, 0, canvas.width, canvas.height)
             }
-            context.clearRect(0, 0, canvas.width, canvas.height)
         }
     }
 
     const clearCanvas = () => {
-        const canvas: any = canvasRef.current
+        const canvas = canvasRef.current
         if (canvas) {
             const context = canvas.getContext("2d")
-            context.clearRect(0, 0, canvas.width, canvas.height)
-            context.drawImage(canvas, 0, 0)
-            setProject(canvas.toDataURL())
-            setCurrentState(canvas.toDataURL())
-            
+            if (context) {
+                context.clearRect(0, 0, canvas.width, canvas.height)
+                context.drawImage(canvas, 0, 0)
+                setProject(canvas.toDataURL())
+                setCurrentState(canvas.toDataURL())
+            }
+
         }
     }
 
@@ -191,20 +298,52 @@ const Canvas = ({ color, shape }: props) => {
                 const imageData = canvas.toDataURL('image/jpeg');
                 console.log(imageData)
 
-                pdf.addImage(canvas, 'JPEG', 5,50,200,200);
+                pdf.addImage(canvas, 'JPEG', 5, 50, 200, 200);
                 pdf.save('canvasToPdf.pdf');
 
             }
         }
+    }
 
 
+
+
+    const stopDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+        setCursor(false)
+        setIsDrawing(false)
+        const canvas: HTMLCanvasElement | null = canvasRef.current
+        if (canvas) {
+            const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
+            if (context) {
+                if (elemArr.length > 0) {
+                    const { lastX, lastY, width, height, radius } = elemArr[elemArr.length - 1]
+                    context.lineWidth = 3
+                    context.strokeStyle = color
+                    context.beginPath()
+                    if (shape === "square") {
+                        context.rect(lastX, lastY, width ? width : 0, height ? height : 0)
+                    }
+                    else if (shape === "circle") {
+                        context.arc(lastX, lastY, radius ? radius : 0, 0, 2 * Math.PI);
+                    }
+                    else {
+                        context.moveTo(lastX, lastY);
+                        context.lineTo(e.clientX, e.clientY);
+                        context.stroke();
+                    }
+                    context.stroke()
+                    setElemArr([])
+                }
+            }
+            setCurrentState(canvas.toDataURL())
+            setProject(canvas.toDataURL())
+        }
 
     }
-    // if(isLoading){
-    //     return(<></>)
-    // }
+
     return (
         <>
+            <div style={{ top: lastY, left: lastX, width: currentX - lastX, height: currentY - lastY }} className={`absolute border-2 border-black/30 ${shape === "circle" ? "rounded-full" : ""} h-5 w-5 ${!cursor ? "hidden" : "block"} top-10`}></div>
             <Link href="/dashboard" className={`absolute left-3 rounded-md bg-white/20 top-2 text-white p-2`}>
                 <MdArrowBack />
             </Link>
@@ -213,7 +352,14 @@ const Canvas = ({ color, shape }: props) => {
                 <button onClick={() => clearCanvas()} className=" bg-red-500 text-white px-2 font-bold trans hover:bg-white hover:text-red-500 cursor-pointer  rounded-md">Clear</button>
             </div>
 
-            <canvas className={`bg-black`} ref={canvasRef} />
+            <canvas
+                onMouseDown={(e) => startDrawing(e)}
+                onMouseMove={(e) => draw(e)}
+                onMouseUp={(e) => stopDrawing(e)}
+                className={`bg-white`}
+                ref={canvasRef}
+            />
+
         </>
     );
 };

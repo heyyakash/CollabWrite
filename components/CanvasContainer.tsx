@@ -4,12 +4,12 @@ import { BsCircle, BsEraser, BsPenFill, BsPencil } from 'react-icons/bs'
 import { BiSquare } from 'react-icons/bi'
 
 const CanvasContainer = () => {
-    const list: string[] = ["tomato", "lightseagreen", "white", "grey", "hotpink", "red"]
+    const list: string[] = ["tomato", "lightseagreen", "black", "grey", "hotpink", "red"]
     const [shape, setShape] = useState<'square' | 'circle' | 'erasure' |null>(null)
     const [color, setColor] = useState<string>("white")
     return (
         <div className=' relative h-screen  w-[75%] bg-[#202020]'>
-            <div className='absolute bg-white/10 left-4 rounded-xl top-[50%] -translate-y-[50%] flex flex-col items-center gap-2 p-4'>
+            <div className='absolute bg-black/20 left-4 rounded-xl top-[50%] -translate-y-[50%] flex flex-col items-center gap-2 p-4'>
                 <BsPenFill className="text-white my-2 " />
                 {list.map((x: string, i: number) => {
                     return (
@@ -19,7 +19,7 @@ const CanvasContainer = () => {
                 })}
             </div>
 
-            <div className='absolute text-xl flex p-3 items-center gap-3 top-2 left-[50%] -translate-x-[50%] bg-white/10 text-white rounded-md'>
+            <div className='absolute text-xl flex p-3 items-center gap-3 top-2 left-[50%] -translate-x-[50%] bg-black/20 text-white rounded-md'>
                 <div onClick={() => setShape("square")} className={`p-1 ${shape === "square" ? "bg-white text-black" : ""}  cursor-pointer rounded-md`}>
                     <BiSquare />
                 </div>
