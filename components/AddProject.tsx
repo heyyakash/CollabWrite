@@ -35,11 +35,11 @@ const AddProject = ({ show, setShow }: propTypes) => {
     const [projectName, setProjectName] = useState<string>("")
     const [searchResult, setSearchResult] = useState<any>([])
     const queryClient = useQueryClient()
-    const { client, account, databases } = getInitialClient()
+    const { databases } = getInitialClient()
     const router = useRouter()
 
     //get user data
-    const { data, isLoading } = useQuery<any>("userData", () => getClient(account), {
+    const { data, isLoading } = useQuery<any>("userData", () => getClient(), {
         onError: () => router.push("/")
     })
 
@@ -66,7 +66,9 @@ const AddProject = ({ show, setShow }: propTypes) => {
                 name: projectName
             })
                 .then(d => {
-                    console.log("done")
+                    databases.createDocument("6475e4e81155c46f87b6", process.env.NEXT_PUBLIC_APPWRITE_DB_CHATS as string, ID.unique(), {
+                        project_id : d["$id"]
+                    })
                     queryClient.invalidateQueries("projects")
                     setProjectId(d["$id"])
                 })
