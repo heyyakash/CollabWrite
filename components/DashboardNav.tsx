@@ -109,7 +109,7 @@ const NotificationBox = ({ data }: any) => {
                     <div onClick={() => acceptInvitation(data.project_id, data["$id"], data.to)} className='rounded-md text-green-400 p-2 border-[.75px] border-green-400'>
                         <TiTick />
                     </div>
-                    <div className='rounded-md text-red-400 p-2  border-[.75px] border-red-400 '>
+                    <div onClick={() => deleteInvitaion(data["$id"])} className='rounded-md text-red-400 p-2  border-[.75px] border-red-400 '>
                         <RxCross2 />
                     </div>
                 </div>

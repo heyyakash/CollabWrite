@@ -27,10 +27,9 @@ const ChatBody = ({chatList}:props) => {
     })
 
     return (
-        <div className='w-full  h-full px-5 pt-3 overflow-auto'>
+        <div className='w-full pb-[50px] h-full px-5 pt-3 overflow-auto'>
             {chatList.map((x, i) => {
-                const msg = JSON.parse(x)
-                console.log(msg)
+                const msg = JSON.parse(x)   
                 return (
                     <div key = {i} className={`flex my-4 flex-col ${msg.email===data.email?"items-end":"items-start"}`}>
                         <p className={`${msg.email===data.email?"primary-gradient bg-clip-text text-transparent":"text-white/30"} font-bold text-sm`}>{msg.name}</p>

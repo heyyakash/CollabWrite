@@ -7,11 +7,14 @@ import { useRouter } from 'next/router'
 import { Account, Client, Databases, Models } from 'appwrite'
 import { useQuery, useQueryClient } from 'react-query'
 import Chat from '@/components/Chat'
+import getChats from '@/helpers/getChats'
 
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const router = useRouter()
+  const [chats,setChats] = useState<string[] | null>(null)
+  const [chatId, setChatId] = useState<string>("")
   const { id } = router.query
   const client = new Client()
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
@@ -41,7 +44,15 @@ export default function Home() {
  
 
   const { data: project, error, isLoading } = useQuery("project", ()=>getProject(id as string))
-
+  const { error: chatError, isLoading:chatIsLoading} = useQuery("chats", ()=>getChats(id as string),{
+    onSuccess(data) {
+        if (data.documents.length>0) {
+            console.log(data.documents)
+            setChats(data.documents[0].chats as string[])
+            setChatId(data.documents[0]["$id"])
+        }
+    },
+})
 
   if (isLoading) return <div className='w-full h-screen grid place-items-center'>Loading</div>
   // if (error) {
@@ -51,7 +62,7 @@ export default function Home() {
   return (
     <div className='flex relative bg-[url("/pattern.png")] bg-repeat bg-contain'>
       <CanvasContainer />
-      <Chat />
+      <Chat chats = {chats as string[]} setChats={setChats} chatId={chatId} />
     </div>
   )
 }
