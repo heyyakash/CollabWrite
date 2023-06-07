@@ -31,7 +31,7 @@ const ChatBody = ({chatList}:props) => {
             {chatList.map((x, i) => {
                 const msg = JSON.parse(x)   
                 return (
-                    <div key = {i} className={`flex my-4 flex-col ${msg.email===data.email?"items-end":"items-start"}`}>
+                    <div key = {i} className={`flex my-2 flex-col ${msg.email===data.email?"items-end":"items-start"}`}>
                         <p className={`${msg.email===data.email?"primary-gradient bg-clip-text text-transparent":"text-white/30"} font-bold text-sm`}>{msg.name}</p>
                         <div style={{ float: data.email === msg.email ? "right" : "left" }} className={`rounded-lg my-2 clear-both bg-white/10 p-2`}>{msg.message}</div>
                     </div>

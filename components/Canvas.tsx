@@ -82,6 +82,9 @@ const Canvas = ({ color }: props) => {
             if (context) {
                 context.clearRect(0,0,canvas.width,canvas.height)
                 if (projectData?.data && projectData?.data !== "null") setImage(projectData.data)
+                const data = canvas.toDataURL()
+                setStack((stack)=>[...stack,data])
+                setTop(stack.length-1)
             }
         }
     }, [])
@@ -147,11 +150,20 @@ const Canvas = ({ color }: props) => {
 
     }
 
+    
     const undo = () => {
+        const canvas = canvasRef.current
+        if(canvas){
+            const context = canvas.getContext("2d")
+            if(context){
+                context.clearRect(0,0,canvas.width, canvas.height)
+                context.globalAlpha= 1
+            }
+        }
         if(top!==-1){
             setTop(top-1)
             setImage(stack[top])
-            // setStack([stack])
+            
             setCurrentState(stack[top])
             setProject(stack[top])
         }
@@ -186,6 +198,9 @@ const Canvas = ({ color }: props) => {
             const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
             if (context) {
                 context.clearRect(0,0,canvas.width,canvas.height)
+                const data = canvas.toDataURL()
+                setStack((stack)=>[...stack, data])
+                setTop(stack.length-1)
             }
         }
     }
@@ -243,7 +258,7 @@ const Canvas = ({ color }: props) => {
             const dataUrl = canvas.toDataURL()
             setCurrentState(dataUrl)
             setStack((stack)=>[...stack, dataUrl])
-            setTop(top+1)
+            setTop(stack.length-1)
             setProject(dataUrl)
             
         }
@@ -253,7 +268,8 @@ const Canvas = ({ color }: props) => {
     return (
         <>
             <UpperToolBar undo = {undo} download = {downlaodPdf} clear = {clearCanvas} shape = {shape} setShape = {setShape} />
-            <div style={{ top: lastY, left: lastX, width: currentX - lastX, height: currentY - lastY }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape==="square"?"block":"hidden"} top-10`}></div>
+            {/* <div style={{ top: lastY, left: lastX, width: currentX - lastX, height: currentY - lastY }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape==="circle"?"block":"hidden"} top-10`}></div> */}
+            <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: (currentY-lastY) }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape==="square"?"block":"hidden"} top-10`}></div>
             <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: "5px" }} className={`absolute border-2 border-white/30 ${shape === "circle" ? "rounded-full" : ""} h-5 w-5 ${cursor && shape==="circle"?"block":"hidden"} top-10`}></div>
             <Link href="/dashboard" className={`absolute left-3 rounded-md bg-green-400/70 top-3 text-white p-2`}>
                 <MdArrowBack />

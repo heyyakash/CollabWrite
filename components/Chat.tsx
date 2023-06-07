@@ -48,8 +48,8 @@ const Chat = ({chats, chatId,setChats}:props) => {
             </div>
             <form onSubmit = {(e)=>sendChatHandler(e)} className='h-[50px] bg-black  text-lg font-semibold text-white fixed bottom-0 w-[100%] '>
                 <input value={msg} onChange={(e)=>setMsg(e.target.value)} type="text" className='bg-transparent h-full text-white outline-none w-[90%] px-3' placeholder='Enter Message' />
-                <button type="submit" className='primary-gradient cursor-pointer relative text-black h-full w-[10%]'>
-                    <BsFillSendFill className='text-2xl absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]' />
+                <button type="submit" className=' cursor-pointer relative text-black h-full w-[10%]'>
+                    <BsFillSendFill className='text-2xl text-green-500 absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]' />
                 </button>
             </form>
         </div>
