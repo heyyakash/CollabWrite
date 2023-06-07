@@ -9,6 +9,7 @@ import getProjects from '@/helpers/db_functions'
 import AddProject from './AddProject'
 import getClient from '@/helpers/getUser'
 import getInitialClient from '@/helpers/getClient'
+import Loading from './Loading'
 
 
 
@@ -31,7 +32,7 @@ const Dashboard = () => {
     if (isLoading) {
         return (
             <div className='h-screen w-full flex items-center justify-center flex-col'>
-                Loading..
+                <Loading />
             </div>
         )
     }

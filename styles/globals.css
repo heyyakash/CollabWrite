@@ -19,7 +19,7 @@
   @apply m-0 p-0 box-border;
 }
 body{
-  @apply w-full min-h-screen font-M; 
+  @apply w-full min-h-screen font-M bg-[#121212]; 
 }
 }
 

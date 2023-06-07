@@ -8,6 +8,7 @@ import { Account, Client, Databases, Models } from 'appwrite'
 import { useQuery, useQueryClient } from 'react-query'
 import Chat from '@/components/Chat'
 import getChats from '@/helpers/getChats'
+import Loading from '@/components/Loading'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -54,7 +55,9 @@ export default function Home() {
     },
 })
 
-  if (isLoading) return <div className='w-full h-screen grid place-items-center'>Loading</div>
+  if (isLoading) return <div className='w-full h-screen'>
+    <Loading />
+  </div>
   // if (error) {
   //   router.push("/dashboard")
   // }

@@ -1,6 +1,7 @@
+import getInitialClient from '@/helpers/getClient'
 import { Account, Client, Databases, ID } from 'appwrite'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 type SignInDetails = {
@@ -16,15 +17,14 @@ type SignUpDetails = SignInDetails & {
 
 const Login = () => {
     const router = useRouter()
-    const client = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID as string)
-    const account = new Account(client)
-    const databases = new Databases(client)
+    const {client, account, databases} = getInitialClient()
     const { register: signUpRegister, handleSubmit } = useForm<SignUpDetails>()
     const { register: signInRegister, handleSubmit: loginHandleSubmit } = useForm<SignInDetails>()
 
 
+    useEffect(()=>{
+        account.get().then(()=>{router.push('/dashboard')}).catch(()=>console.log("No users"))
+    },[])
 
     const handleSignUp = (data: SignUpDetails) => {
         console.log(data)
