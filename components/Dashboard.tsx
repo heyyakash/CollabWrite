@@ -18,15 +18,19 @@ const Dashboard = () => {
     const router = useRouter()
     const [show, setShow] = useState<boolean>(false)
     const queryClient = useQueryClient()
-    const projects : any= queryClient.getQueryData("projects")
+    // const projects : any= queryClient.getQueryData("projects")
     const {client, account, databases} = getInitialClient()
-
+    const [projectNumber,setProjectNumber] = useState<number>(0)
  
     //get user data
     const { data, isLoading } = useQuery<any>("userData", ()=>getClient(), {
-        onError: () => router.push("/")
+        onError: () => router.push("/"),
+        onSuccess:async (data) => {
+            const res  = await getProjects(databases, data["$id"])
+            setProjectNumber(res.length)
+        }
     })
-
+    
 
 
     if (isLoading) {
@@ -45,7 +49,7 @@ const Dashboard = () => {
                 <div className='flex items-center justify-between'>
                     <div className='p-6 first:col-span-2'><span className='text-xl leading-2 font-semibold text-white/70 bg-clip-text primary-gradient text-transparent'>Hello</span><span className='text-white text-[3rem] font-semibold block'>{data.name} 👋</span></div>
                     <div className="flex items-center justify-center w-[300px]  h-[130px] rounded-lg primary-gradient">
-                        <p className='text-[3rem] font-semibold  text-black'>{projects?.length}<span className='text-sm'>Projects</span></p>
+                        <p className='text-[3rem] font-semibold  text-black'>{projectNumber}<span className='text-sm'>Projects</span></p>
                     </div>
     
                 </div>
