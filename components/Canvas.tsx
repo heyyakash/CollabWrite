@@ -230,7 +230,6 @@ const Canvas = ({ color }: props) => {
         if (canvas) {
             const context = canvas?.getContext("2d");
             if (context) {
-                const pdf = new jsPDF();
                 const imageData = canvas.toDataURL('image/jpeg');
                 window.open(imageData, '_blank')
 
