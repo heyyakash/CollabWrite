@@ -63,7 +63,7 @@ const Canvas = ({ color }: props) => {
     const [cursor, setCursor] = useState<boolean>(false)
     const [stack, setStack] = useState<string[]>([])
     const [top, setTop] = useState<number>(-1)
-    const [shape, setShape] = useState<shapes>(null)
+    const [shape, setShape] = useState<shapes>("free")
     type elements = {
         width?: number,
         height?: number,
@@ -111,6 +111,7 @@ const Canvas = ({ color }: props) => {
 
             const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
             if (context) {
+                context.strokeStyle = color
                 if (shape === "square") {
                     setCurrentX(e.clientX)
                     setCurrentY(e.clientY)
@@ -144,7 +145,7 @@ const Canvas = ({ color }: props) => {
                     context.clearRect(x - eraserSize / 2, y - eraserSize / 2, eraserSize, eraserSize);
                 }
 
-                else {
+                else if(shape === "line"){
                     setCurrentX(e.clientX)
                     setCurrentY(e.clientY)
                     const { clientX, clientY } = e
@@ -153,6 +154,16 @@ const Canvas = ({ color }: props) => {
                     context.strokeStyle = color;
 
                 }
+        
+                else{
+                    context.moveTo(lastX, lastY);
+                    context.lineTo(e.clientX, e.clientY);
+                    context.stroke();
+                    context.fill()
+                    setLastX(e.clientX)
+                    setLastY(e.clientY)
+                }
+
             }
         }
 
@@ -222,10 +233,7 @@ const Canvas = ({ color }: props) => {
             if (context) {
                 const pdf = new jsPDF();
                 const imageData = canvas.toDataURL('image/jpeg');
-                console.log(imageData)
-
-                pdf.addImage(canvas, 'JPEG', 5, 50, 200, 200);
-                pdf.save('canvasToPdf.pdf');
+                window.open(imageData, '_blank')
 
             }
         }
@@ -275,7 +283,7 @@ const Canvas = ({ color }: props) => {
                             context.restore();
                         }
                     }
-                    else {
+                    else if(shape==="line") {
                         context.moveTo(lastX, lastY);
                         context.lineTo(e.clientX, e.clientY);
                         context.stroke();

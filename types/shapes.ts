@@ -1,1 +1,1 @@
-export type shapes = 'square' | 'circle' | 'erasure' | 'arrow' | null 
+export type shapes = 'square' | 'circle' | 'erasure' | 'arrow' | 'line' | 'free'  

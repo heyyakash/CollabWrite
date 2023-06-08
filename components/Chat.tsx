@@ -41,7 +41,7 @@ const Chat = ({chats, chatId,setChats}:props) => {
     if(chatId)
     return (
         <div className='w-[25%] h-screen hidden xl:flex items-center px-5  '>
-        <div className='w-full flex flex-col rounded-md drop-shadow-2xl h-[calc(100%-2rem)] relative overflow-hidden text-white  bg-black/60'>
+        <div className='w-full flex flex-col rounded-md drop-shadow-2xl h-[calc(100%-2rem)] relative overflow-hidden text-white  bg-black/50'>
             <div className='p-3 h-[50px]  text-lg font-semibold border-b-2 border-green-300 sticky bg-black'><p className='text-transparent bg-clip-text primary-gradient'>Team Chat</p></div>
             <div className='h-full  pb-[50px] '>
                 <ChatBody chatList={chats} />

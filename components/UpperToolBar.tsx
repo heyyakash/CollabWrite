@@ -4,6 +4,7 @@ import { BiSquare, BiUndo } from 'react-icons/bi'
 import { shapes } from '@/types/shapes'
 import { AiOutlineDownload } from 'react-icons/ai'
 import { MdOutlineClear } from 'react-icons/md'
+import {GiStraightPipe} from 'react-icons/gi'
 
 type props = {
     setShape : React.Dispatch<React.SetStateAction<shapes>>
@@ -26,7 +27,10 @@ const UpperToolBar = ({setShape, shape, clear, undo, download}:props) => {
             <div onClick={() => setShape("arrow")} className={`p-1 ${shape === "arrow" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <BsArrowUpRight className='cursor-pointer text-lg' />
             </div>
-            <div onClick={() => setShape(null)} className={`p-1 ${!shape ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
+            <div onClick={() => setShape("line")} className={`p-1 ${shape === "line" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
+                <GiStraightPipe className='cursor-pointer text-lg' />
+            </div>
+            <div onClick={() => setShape("free")} className={`p-1 ${shape === "free" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <BsPencil className='cursor-pointer text-lg' />
             </div>
             <div onClick={() => setShape("erasure")} className={`p-1 ${shape === "erasure" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
