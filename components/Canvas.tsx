@@ -67,7 +67,6 @@ const Canvas = ({ color }: props) => {
                 context.clearRect(0, 0, canvas.width, canvas.height)
                 
                 if (projectData?.data && projectData?.data !== "null") {
-                    context.globalAlpha = 1
                     setImage(projectData.data, canvasRef)
                     setStack((stack)=>[data])
                 }

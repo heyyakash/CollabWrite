@@ -68,6 +68,7 @@ export const setImage = (image: string, canvasRef: canvasRef) => {
                 img.src = image
                 return
             }
+            context.globalAlpha=1
             context.clearRect(0, 0, canvas.width, canvas.height)
         }
     }
