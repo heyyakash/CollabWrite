@@ -59,7 +59,7 @@ export const setImage = (image: string, canvasRef: canvasRef) => {
 
         const context = canvas.getContext("2d")
         if (context) {
-            context.clearRect(0, 0, canvas.width, canvas.height)
+            // context.clearRect(0, 0, canvas.width, canvas.height)
             if (image.length > 0) {
                 const img = new Image()
                 img.onload = () => {
