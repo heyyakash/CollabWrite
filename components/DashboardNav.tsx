@@ -49,7 +49,7 @@ const DashboardNav = () => {
 
     return (
         <nav className='h-[80px] fixed w-full bg-black z-[1000] border-b border-white/20'>
-            <div className='h-full mx-auto max-w-[1200px] flex items-center justify-between'>
+            <div className='h-full mx-auto px-3 xl:px-0 max-w-[1200px] flex items-center justify-between'>
                 <div className="flex items-center gap-2">
                     <MdHandshake className='text-3xl' />
                     <h3 className='font-bold primary-gradient text-transparent bg-clip-text'>Collaborate</h3>

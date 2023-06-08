@@ -6,7 +6,6 @@ import { MdArrowBack } from "react-icons/md";
 import { useQuery, useQueryClient } from "react-query";
 import UpperToolBar from "./UpperToolBar";
 import { shapes } from "@/types/shapes";
-import pattern from '../public/pattern.png'
 import { draw, startDrawing, stopDrawing } from "@/helpers/canvasFunctions";
 import { clearCanvas, downlaodPNG, setImage, undo } from "@/helpers/canvasUtilites";
 import { elements } from "@/types/elements";
@@ -45,11 +44,10 @@ const Canvas = ({ color }: props) => {
         }).then(d => console.log("Done")).catch(err => console.log(err))
     }
 
-    
+
     useEffect(() => {
         setCurrentState(null)
         const unsubscribe = client.subscribe([`databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.${id}`, 'files'], (response: any) => {
-
             if (response.payload.edited_by !== data.email) {
                 setImage(response.payload.data, canvasRef)
             }
@@ -59,24 +57,32 @@ const Canvas = ({ color }: props) => {
 
 
     useEffect(() => {
+        window.onscroll = () => {}
         const canvas: HTMLCanvasElement | null = canvasRef.current
         if (canvas) {
             canvas.height = window.innerHeight
-            canvas.width = window.innerWidth * .75;
+            canvas.width = window.innerWidth<1288?window.innerHeight:window.innerWidth * .75;
             const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
             if (context) {
                 context.clearRect(0, 0, canvas.width, canvas.height)
-                if (projectData?.data && projectData?.data !== "null") setImage(projectData.data,canvasRef)
-                const data = canvas.toDataURL()
-                setStack((stack) => [...stack, data])
-                setTop(stack.length - 1)
+                
+                if (projectData?.data && projectData?.data !== "null") {
+                    context.globalAlpha = 1
+                    setImage(projectData.data, canvasRef)
+                    setStack((stack)=>[data])
+                }
+                else {
+                    const data = canvas.toDataURL()
+                    setStack((stack) => [...stack, data])
+                }
+                setTop(0)
             }
         }
     }, [])
 
     return (
         <>
-            <UpperToolBar undo={()=>undo(canvasRef, top, setCurrentState, stack, setTop, setProject)} download={() => downlaodPNG(canvasRef)} clear={()=>clearCanvas(canvasRef,setStack, stack, setTop)} shape={shape} setShape={setShape} />
+            <UpperToolBar undo={() => undo(canvasRef, top, setCurrentState, stack, setStack, setTop, setProject)} download={() => downlaodPNG(canvasRef)} clear={() => clearCanvas(canvasRef, setStack, stack, setTop)} shape={shape} setShape={setShape} />
             {/* <div style={{ top: lastY, left: lastX, width: currentX - lastX, height: currentY - lastY }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape==="circle"?"block":"hidden"} top-10`}></div> */}
             <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: (currentY - lastY) }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape === "square" ? "block" : "hidden"} top-10`}></div>
             <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: "5px" }} className={`absolute border-2 border-white/30 ${shape === "circle" ? "rounded-full" : ""} h-5 w-5 ${cursor && shape === "circle" ? "block" : "hidden"} top-10`}></div>
@@ -86,6 +92,9 @@ const Canvas = ({ color }: props) => {
             <img src="/pattern.svg" id="sbgImage" style={{ display: "none" }} ref={patternRef} alt="" />
 
             <canvas
+                onTouchStart={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY)}
+                onTouchMove={(e) => draw(e, isDrawing, canvasRef, color, shape, setCurrentX, setCurrentY, currentX, currentY, setElemArr, lastX, lastY, setLastX, setLastY)}
+                onTouchEnd={(e) => stopDrawing(e, canvasRef, setCursor, setIsDrawing, elemArr, color, shape, setElemArr, stack, setStack, setTop, setCurrentState, setProject)}
                 onMouseDown={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY)}
                 onMouseMove={(e) => draw(e, isDrawing, canvasRef, color, shape, setCurrentX, setCurrentY, currentX, currentY, setElemArr, lastX, lastY, setLastX, setLastY)}
                 onMouseUp={(e) => stopDrawing(e, canvasRef, setCursor, setIsDrawing, elemArr, color, shape, setElemArr, stack, setStack, setTop, setCurrentState, setProject)}

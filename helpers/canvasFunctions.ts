@@ -13,13 +13,22 @@ export const startDrawing = (
     setCurrentX: setStateNumber,
     setCurrentY: setStateNumber
 
-    ) => {
+) => {
     setIsDrawing(true)
     setCursor(true)
-    setLastX(e.clientX)
-    setLastY(e.clientY)
-    setCurrentX(e.clientX)
-    setCurrentY(e.clientY)
+    if ("touches" in e) {
+        setLastX(e.touches[0].clientX)
+        setLastY(e.touches[0].clientY)
+        setCurrentX(e.touches[0].clientX)
+        setCurrentY(e.touches[0].clientY)
+    }
+    else {
+        setLastX(e.clientX)
+        setLastY(e.clientY)
+        setCurrentX(e.clientX)
+        setCurrentY(e.clientY)
+    }
+
 }
 
 
@@ -31,16 +40,16 @@ export const draw = (
     color: string,
     shape: string,
     setCurrentX: setStateNumber,
-    setCurrentY:setStateNumber,
+    setCurrentY: setStateNumber,
     currentX: number,
-    currentY:number,
+    currentY: number,
     setElemArr: setStateElements,
     lastX: number,
     lastY: number,
     setLastX: setStateNumber,
     setLastY: setStateNumber
-    ) => {
-
+) => {
+    e.preventDefault()
     if (!isDrawing) return;
     const canvas: HTMLCanvasElement | null = canvasRef.current
     if (canvas) {
@@ -49,17 +58,30 @@ export const draw = (
         if (context) {
             context.strokeStyle = color
             if (shape === "square") {
-                setCurrentX(e.clientX)
-                setCurrentY(e.clientY)
+                if ('touches' in e) {
+                    setCurrentX(e.touches[0].clientX)
+                    setCurrentY(e.touches[0].clientY)
+                }
+                else {
+                    setCurrentX(e.clientX)
+                    setCurrentY(e.clientY)
+                }
                 const width = (currentX - lastX)
                 const height = (currentY - lastY)
                 setElemArr((elemArr) => [...elemArr, { lastX, lastY, width, height }])
 
+
             }
 
             else if (shape === "circle") {
-                setCurrentX(e.clientX)
-                setCurrentY(e.clientY)
+                if ('touches' in e) {
+                    setCurrentX(e.touches[0].clientX)
+                    setCurrentY(e.touches[0].clientY)
+                }
+                else {
+                    setCurrentX(e.clientX)
+                    setCurrentY(e.clientY)
+                }
                 const radius = Math.sqrt(
                     Math.pow(currentX - lastX, 2) + Math.pow(currentY - lastY, 2)
                 );
@@ -67,8 +89,14 @@ export const draw = (
             }
 
             else if (shape === "arrow") {
-                setCurrentX(e.clientX)
-                setCurrentY(e.clientY)
+                if ('touches' in e) {
+                    setCurrentX(e.touches[0].clientX)
+                    setCurrentY(e.touches[0].clientY)
+                }
+                else {
+                    setCurrentX(e.clientX)
+                    setCurrentY(e.clientY)
+                }
                 setElemArr((elemArr) => [...elemArr, { lastX, lastY, currentX, currentY }])
 
             }
@@ -76,15 +104,35 @@ export const draw = (
             else if (shape === "erasure") {
                 const eraserSize = 50
                 const rect = canvas.getBoundingClientRect()
-                const x = e.clientX - rect.left
-                const y = e.clientY - rect.top
+                let x, y
+                if ('touches' in e) {
+                    x = e.touches[0].clientX - rect.left
+                    y = e.touches[0].clientY - rect.top
+                }
+                else {
+                    x = e.clientX - rect.left
+                    y = e.clientY - rect.top
+                }
+
                 context.clearRect(x - eraserSize / 2, y - eraserSize / 2, eraserSize, eraserSize);
             }
 
             else if (shape === "line") {
-                setCurrentX(e.clientX)
-                setCurrentY(e.clientY)
-                const { clientX, clientY } = e
+                let clientX: number, clientY: number
+                if ('touches' in e) {
+                    setCurrentX(e.touches[0].clientX)
+                    setCurrentY(e.touches[0].clientY)
+                    clientX = e.touches[0].clientX
+                    clientY = e.touches[0].clientY
+                }
+                else {
+                    setCurrentX(e.clientX)
+                    setCurrentY(e.clientY)
+                    clientX = e.clientX
+                    clientY = e.clientY
+                }
+
+
                 setElemArr((elemArr) => [...elemArr, { lastX, lastY, clientX, clientY }])
                 context.lineWidth = 2;
                 context.strokeStyle = color;
@@ -93,11 +141,23 @@ export const draw = (
 
             else {
                 context.moveTo(lastX, lastY);
-                context.lineTo(e.clientX, e.clientY);
+                if ('touches' in e) {
+                    context.lineTo(e.touches[0].clientX, e.touches[0].clientY);
+                }
+                else {
+                    context.lineTo(e.clientX, e.clientY);
+                }
+
                 context.stroke();
                 context.fill()
-                setLastX(e.clientX)
-                setLastY(e.clientY)
+                if ('touches' in e) {
+                    setLastX(e.touches[0].clientX)
+                    setLastY(e.touches[0].clientY)
+                }
+                else {
+                    setLastX(e.clientX)
+                    setLastY(e.clientY)
+                }
             }
 
         }
@@ -150,8 +210,13 @@ export const stopDrawing = (e: mouseEvent, canvasRef: canvasRef, setCursor: setS
                 }
                 else if (shape === "line") {
                     context.moveTo(lastX, lastY);
-                    context.lineTo(e.clientX, e.clientY);
-                    context.stroke();
+                    if ('touches' in e) {
+                        context.lineTo(e.touches[0].clientX, e.touches[0].clientY)
+                    }
+                    else {
+                        context.lineTo(e.clientX, e.clientY)
+                    }
+                    context.stroke()
                 }
                 context.stroke()
                 context.fill()

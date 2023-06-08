@@ -45,10 +45,10 @@ const Dashboard = () => {
     return (
         <main className='bg-black relative text-white min-h-screen w-full'>
             <DashboardNav />
-            <section className='max-w-[1200px] w-full relative mx-auto pt-[120px] '>
-                <div className='flex items-center justify-between'>
-                    <div className='p-6 first:col-span-2'><span className='text-xl leading-2 font-semibold text-white/70 bg-clip-text primary-gradient text-transparent'>Hello</span><span className='text-white text-[3rem] font-semibold block'>{data.name} 👋</span></div>
-                    <div className="flex items-center justify-center w-[300px]  h-[130px] rounded-lg primary-gradient">
+            <section className='max-w-[1200px] w-full relative mx-auto pt-[120px] px-5 xl:px-0 '>
+                <div className='flex flex-col md:flex-row items-center justify-between gap-10 xl:gap-none'>
+                    <div className='xl:p-6 first:col-span-2'><span className='text-xl leading-2 font-semibold text-white/70 bg-clip-text primary-gradient text-transparent'>Hello</span><span className='text-white text-[3rem] font-semibold block'>{data.name} 👋</span></div>
+                    <div className="flex items-center justify-center w-full md:w-[300px]  h-[130px] rounded-lg primary-gradient">
                         <p className='text-[3rem] font-semibold  text-black'>{projectNumber}<span className='text-sm'>Projects</span></p>
                     </div>
     

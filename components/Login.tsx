@@ -61,9 +61,9 @@ const Login = () => {
 
     return (
         <section className='min-h-screen w-full flex items-center justify-center flex-col gap-2 bg-[#121212] text-white'>
-            <h2 className='text-[2.5rem] font-[700]'>Login to Your Account</h2>
-            <p className='text-lg w-[500px] text-white/40 text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, saepe?</p>
-            <div className='flex gap-5 items-center mt-5 justify-evenly min-w-[700px]'>
+            <h2 className='text-center text-[2.5rem] font-[700]'>Login to Your Account</h2>
+            <p className='text-lg md:w-[500px] text-white/40 text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, saepe?</p>
+            <div className='flex flex-col lg:flex-row gap-5 items-center mt-5 justify-center xl:justify-evenly w-full max-w-[700px]'>
 
                 <form onSubmit={loginHandleSubmit(handleSignIn)} className='p-4 flex flex-col gap-3'>
                     <p className='text-sm font-semibold'>Sign In</p>

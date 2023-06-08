@@ -33,9 +33,9 @@ export const clearCanvas = (canvasRef: canvasRef, setStack: setStateStringArray,
 
 
 //function to undo current change
-export const undo = (canvasRef: canvasRef, top: number, setCurrentState: setStateCurrentState, stack: string[], setTop: setStateNumber, setProject: setProjectFunction) => {
+export const undo = (canvasRef: canvasRef, top: number, setCurrentState: setStateCurrentState, stack: string[], setStack:setStateStringArray,setTop: setStateNumber, setProject: setProjectFunction) => {
     const canvas = canvasRef.current
-    if (top !== -1) {
+    if (top > 0) {
         if (canvas) {
             const context = canvas.getContext("2d")
             if (context) {
@@ -44,6 +44,7 @@ export const undo = (canvasRef: canvasRef, top: number, setCurrentState: setStat
             }
         }
         setTop(top - 1)
+        setStack(stack => [...stack, stack[top]])
         setImage(stack[top], canvasRef)
         setCurrentState(stack[top])
         setProject(stack[top])

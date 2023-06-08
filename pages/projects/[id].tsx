@@ -44,7 +44,13 @@ export default function Home() {
   })
  
 
-  const { data: project, error, isLoading } = useQuery("project", ()=>getProject(id as string))
+  const { data: project, error, isLoading } = useQuery("project", ()=>getProject(id as string),{
+    refetchIntervalInBackground:false,
+    refetchOnMount:false,
+    refetchOnReconnect:false,
+    refetchOnWindowFocus:false,
+    refetchInterval:false
+  })
   const { error: chatError, isLoading:chatIsLoading} = useQuery("chats", ()=>getChats(id as string),{
     onSuccess(data) {
         if (data.documents.length>0) {
