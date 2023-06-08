@@ -179,7 +179,7 @@ export const stopDrawing = (e: mouseEvent, canvasRef: canvasRef, setCursor: setS
                 context.lineWidth = 4
                 context.strokeStyle = color
                 context.fillStyle = color
-                context.globalAlpha = 0.3
+                // context.globalAlpha = 0.3
                 context.beginPath()
                 if (shape === "square") {
                     context.rect(lastX, lastY, width ? width : 0, height ? height : 0)
@@ -219,7 +219,7 @@ export const stopDrawing = (e: mouseEvent, canvasRef: canvasRef, setCursor: setS
                     context.stroke()
                 }
                 context.stroke()
-                context.fill()
+                // context.fill()
                 setElemArr([])
             }
         }

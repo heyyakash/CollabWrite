@@ -26,7 +26,8 @@ export default function Home() {
 
   const getProject = async (id:string) => {
 
-    const data = await databases.getDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id as string)
+    const data = await databases.getDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", "6480c098d5abc88e6a4c")
+    console.log(data)
     return data
   }
 

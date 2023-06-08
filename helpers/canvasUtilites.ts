@@ -40,7 +40,7 @@ export const undo = (canvasRef: canvasRef, top: number, setCurrentState: setStat
             const context = canvas.getContext("2d")
             if (context) {
                 context.clearRect(0, 0, canvas.width, canvas.height)
-                context.globalAlpha = 1
+                // context.globalAlpha = 1
             }
         }
         setTop(top - 1)
@@ -59,7 +59,7 @@ export const setImage = (image: string, canvasRef: canvasRef) => {
 
         const context = canvas.getContext("2d")
         if (context) {
-            // context.clearRect(0, 0, canvas.width, canvas.height)
+            context.clearRect(0, 0, canvas.width, canvas.height)
             if (image.length > 0) {
                 const img = new Image()
                 img.onload = () => {
@@ -68,7 +68,7 @@ export const setImage = (image: string, canvasRef: canvasRef) => {
                 img.src = image
                 return
             }
-            context.globalAlpha=1
+            // context.globalAlpha=1
             context.clearRect(0, 0, canvas.width, canvas.height)
         }
     }
