@@ -61,7 +61,8 @@ const Canvas = ({ color }: props) => {
         const canvas: HTMLCanvasElement | null = canvasRef.current
         if (canvas) {
             canvas.height = window.innerHeight
-            canvas.width = window.innerWidth<1288?window.innerHeight:window.innerWidth * .75;
+            canvas.width = window.innerWidth
+            // canvas.width = window.innerWidth<1288?window.innerHeight:window.innerWidth * .75;
             const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
             if (context) {
                 context.clearRect(0, 0, canvas.width, canvas.height)
