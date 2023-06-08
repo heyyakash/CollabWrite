@@ -9,7 +9,18 @@ export const downlaodPNG = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
         const context = canvas?.getContext("2d");
         if (context) {
             const imageData = canvas.toDataURL('image/jpeg');
-            window.open(imageData, '_blank')
+            const link = document.createElement('a');
+            link.href = imageData;
+            link.download = 'canvas.png';
+            link.target = '_blank';
+            
+            // Simulate a click on the link
+            const clickEvent = new MouseEvent('click', {
+              view: window,
+              bubbles: true,
+              cancelable: true
+            });
+            link.dispatchEvent(clickEvent);
 
         }
     }
