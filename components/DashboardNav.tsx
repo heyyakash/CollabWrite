@@ -55,22 +55,21 @@ const DashboardNav = () => {
                     <h3 className='font-bold primary-gradient text-transparent bg-clip-text'>Collaborate</h3>
                 </div>
                 <div className='flex text-xl trans text-white/50 items-center cursor-pointer  gap-2'>
-                    <div className='trans hover:bg-white/20 p-2 rounded-full relative'>
+                    <div onClick={() => setShow(!show)} className='trans hover:bg-white/20 p-2 rounded-full relative'>
                         {invitations?.length>0 && <div className='bg-red-500 h-1 rounded-full w-1 absolute right-2'></div>}
-                        <BiBell onClick={() => setShow(!show)} className='hover:text-white trans' />
+                        <BiBell  className='hover:text-white trans' />
                         <div className={`${show ? "flex" : "hidden"} flex-col p-2 rounded-xl   absolute w-[500px] min-h-[100px] bg-black border-[1px] border-white/20 left-[-15rem] top-10`}>
-                            {!isLoading && !error ?
-                                invitations?.map((x: any, i: number) => <NotificationBox key={i} data={x} />) : (<></>)}
+                            {!isLoading && !error &&invitations.length>0 ?
+                                invitations?.map((x: any, i: number) => <NotificationBox key={i} data={x} />) : 
+                                (<div className='grid place-items-center text-md font-bold h-[100px] text-white/50'>No new notifications</div>)}
 
-                            {/* <NotificationBox />
-                            <NotificationBox /> */}
                         </div>
                     </div>
                     <div className='trans hover:bg-white/20 p-2 rounded-full'>
                         <FiSettings className='hover:text-white trans' />
                     </div>
-                    <div className='trans hover:bg-white/20 p-2 rounded-full'>
-                        <FiLogOut onClick={handleLogOut} className='hover:text-red-400 trans' />
+                    <div onClick={handleLogOut} className='trans hover:bg-white/20 p-2 rounded-full'>
+                        <FiLogOut  className='hover:text-red-400 trans' />
                     </div>
 
                 </div>
