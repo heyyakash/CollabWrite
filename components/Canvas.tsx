@@ -48,7 +48,7 @@ const Canvas = ({ color }: props) => {
     }, [])
 
 
-   
+
 
     const patternRef = useRef<HTMLImageElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -61,8 +61,8 @@ const Canvas = ({ color }: props) => {
     const [currentY, setCurrentY] = useState<number>(0)
     const [elemArr, setElemArr] = useState<elements[]>([])
     const [cursor, setCursor] = useState<boolean>(false)
-    const [stack,setStack] = useState<string[]>([])
-    const [top,setTop] = useState<number>(-1)
+    const [stack, setStack] = useState<string[]>([])
+    const [top, setTop] = useState<number>(-1)
     const [shape, setShape] = useState<shapes>(null)
     type elements = {
         width?: number,
@@ -70,6 +70,8 @@ const Canvas = ({ color }: props) => {
         lastX: number,
         lastY: number,
         radius?: number
+        currentX?: number,
+        currentY?: number
     }
 
 
@@ -80,11 +82,11 @@ const Canvas = ({ color }: props) => {
             canvas.width = window.innerWidth * .75;
             const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
             if (context) {
-                context.clearRect(0,0,canvas.width,canvas.height)
+                context.clearRect(0, 0, canvas.width, canvas.height)
                 if (projectData?.data && projectData?.data !== "null") setImage(projectData.data)
                 const data = canvas.toDataURL()
-                setStack((stack)=>[...stack,data])
-                setTop(stack.length-1)
+                setStack((stack) => [...stack, data])
+                setTop(stack.length - 1)
             }
         }
     }, [])
@@ -127,6 +129,13 @@ const Canvas = ({ color }: props) => {
                     setElemArr((elemArr) => [...elemArr, { lastX, lastY, radius }])
                 }
 
+                else if (shape === "arrow") {
+                    setCurrentX(e.clientX)
+                    setCurrentY(e.clientY)
+                    setElemArr((elemArr) => [...elemArr, { lastX, lastY, currentX, currentY }])
+
+                }
+
                 else if (shape === "erasure") {
                     const eraserSize = 50
                     const rect = canvas.getBoundingClientRect()
@@ -150,20 +159,20 @@ const Canvas = ({ color }: props) => {
 
     }
 
-    
+
     const undo = () => {
         const canvas = canvasRef.current
-        if(canvas){
-            const context = canvas.getContext("2d")
-            if(context){
-                context.clearRect(0,0,canvas.width, canvas.height)
-                context.globalAlpha= 1
+        if (top !== -1) {
+            if (canvas) {
+                const context = canvas.getContext("2d")
+                if (context) {
+                    context.clearRect(0, 0, canvas.width, canvas.height)
+                    context.globalAlpha = 1
+                }
             }
-        }
-        if(top!==-1){
-            setTop(top-1)
+            setTop(top - 1)
             setImage(stack[top])
-            
+
             setCurrentState(stack[top])
             setProject(stack[top])
         }
@@ -197,10 +206,10 @@ const Canvas = ({ color }: props) => {
             canvas.width = window.innerWidth * .75;
             const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
             if (context) {
-                context.clearRect(0,0,canvas.width,canvas.height)
+                context.clearRect(0, 0, canvas.width, canvas.height)
                 const data = canvas.toDataURL()
-                setStack((stack)=>[...stack, data])
-                setTop(stack.length-1)
+                setStack((stack) => [...stack, data])
+                setTop(stack.length - 1)
             }
         }
     }
@@ -233,7 +242,7 @@ const Canvas = ({ color }: props) => {
             const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
             if (context) {
                 if (elemArr.length > 0) {
-                    const { lastX, lastY, width, height, radius } = elemArr[elemArr.length - 1]
+                    const { lastX, lastY, width, height, radius, currentX, currentY } = elemArr[elemArr.length - 1]
                     context.lineWidth = 4
                     context.strokeStyle = color
                     context.fillStyle = color
@@ -244,6 +253,27 @@ const Canvas = ({ color }: props) => {
                     }
                     else if (shape === "circle") {
                         context.arc(lastX, lastY, radius ? radius : 0, 0, 2 * Math.PI);
+                    }
+                    else if (shape === "arrow") {
+                        if (currentX && currentY) {
+                            const angle = Math.atan2(currentY - lastY, currentX - lastX);
+                            const length = Math.sqrt((currentX - lastX) ** 2 + (currentY - lastY) ** 2);
+                            context.moveTo(lastX, lastY);
+                            context.lineTo(currentX, currentY);
+                            context.stroke();
+
+                            // Draw the arrowhead
+                            context.save();
+                            context.translate(currentX, currentY);
+                            context.rotate(angle);
+                            context.beginPath();
+                            context.moveTo(0, 0);
+                            context.lineTo(-10, -5);
+                            context.lineTo(-10, 5);
+                            context.closePath();
+                            context.fill();
+                            context.restore();
+                        }
                     }
                     else {
                         context.moveTo(lastX, lastY);
@@ -257,24 +287,24 @@ const Canvas = ({ color }: props) => {
             }
             const dataUrl = canvas.toDataURL()
             setCurrentState(dataUrl)
-            setStack((stack)=>[...stack, dataUrl])
-            setTop(stack.length-1)
+            setStack((stack) => [...stack, dataUrl])
+            setTop(stack.length - 1)
             setProject(dataUrl)
-            
+
         }
 
     }
 
     return (
         <>
-            <UpperToolBar undo = {undo} download = {downlaodPdf} clear = {clearCanvas} shape = {shape} setShape = {setShape} />
+            <UpperToolBar undo={undo} download={downlaodPdf} clear={clearCanvas} shape={shape} setShape={setShape} />
             {/* <div style={{ top: lastY, left: lastX, width: currentX - lastX, height: currentY - lastY }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape==="circle"?"block":"hidden"} top-10`}></div> */}
-            <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: (currentY-lastY) }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape==="square"?"block":"hidden"} top-10`}></div>
-            <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: "5px" }} className={`absolute border-2 border-white/30 ${shape === "circle" ? "rounded-full" : ""} h-5 w-5 ${cursor && shape==="circle"?"block":"hidden"} top-10`}></div>
+            <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: (currentY - lastY) }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape === "square" ? "block" : "hidden"} top-10`}></div>
+            <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: "5px" }} className={`absolute border-2 border-white/30 ${shape === "circle" ? "rounded-full" : ""} h-5 w-5 ${cursor && shape === "circle" ? "block" : "hidden"} top-10`}></div>
             <Link href="/dashboard" className={`absolute left-3 rounded-md bg-green-400/70 top-3 text-white p-2`}>
                 <MdArrowBack />
             </Link>
-            <img src="/pattern.svg" id = "sbgImage" style = {{display:"none"}} ref = {patternRef} alt="" />
+            <img src="/pattern.svg" id="sbgImage" style={{ display: "none" }} ref={patternRef} alt="" />
 
             <canvas
                 onMouseDown={(e) => startDrawing(e)}

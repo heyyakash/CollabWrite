@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BsCircle, BsEraser, BsPenFill, BsPencil } from 'react-icons/bs'
+import { BsArrowUpRight, BsCircle, BsEraser, BsPenFill, BsPencil } from 'react-icons/bs'
 import { BiSquare, BiUndo } from 'react-icons/bi'
 import { shapes } from '@/types/shapes'
 import { AiOutlineDownload } from 'react-icons/ai'
@@ -23,13 +23,16 @@ const UpperToolBar = ({setShape, shape, clear, undo, download}:props) => {
             <div onClick={() => setShape("circle")} className={`p-1 ${shape === "circle" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <BsCircle className='cursor-pointer text-lg' />
             </div>
+            <div onClick={() => setShape("arrow")} className={`p-1 ${shape === "arrow" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
+                <BsArrowUpRight className='cursor-pointer text-lg' />
+            </div>
             <div onClick={() => setShape(null)} className={`p-1 ${!shape ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <BsPencil className='cursor-pointer text-lg' />
             </div>
             <div onClick={() => setShape("erasure")} className={`p-1 ${shape === "erasure" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <BsEraser className='cursor-pointer text-lg' />
             </div>
-            <div className='bg-white h-6 w-[2px]'></div>
+            <div className='bg-white/80 h-6 w-[2px]'></div>
             <div onClick={() => undo()} className={`p-1   cursor-pointer rounded-md`}>
                 <BiUndo className='cursor-pointer text-lg' />
             </div>
