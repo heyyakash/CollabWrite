@@ -9,18 +9,20 @@ import { shapes } from "@/types/shapes";
 import { draw, startDrawing, stopDrawing } from "@/helpers/canvasFunctions";
 import { clearCanvas, downlaodPNG, setImage, undo } from "@/helpers/canvasUtilites";
 import { elements } from "@/types/elements";
+import { Models } from "appwrite";
 
 type props = {
     color: string
+    projectData: Models.Document | undefined
+    data: any
 }
 
-const Canvas = ({ color }: props) => {
+const Canvas = ({ color , projectData, data}: props) => {
     const router = useRouter()
     const { id } = router.query
     const { client, account, databases } = getInitialClient()
     const queryClient = useQueryClient()
-    const projectData: any = queryClient.getQueryData("project")
-    const data: any = queryClient.getQueryData("userData")
+    // const projectData: any = queryClient.getQueryData("project")
     const patternRef = useRef<HTMLImageElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [currentState, setCurrentState] = useState<string | null>(null)
@@ -36,19 +38,20 @@ const Canvas = ({ color }: props) => {
     const [top, setTop] = useState<number>(-1)
     const [shape, setShape] = useState<shapes>("free")
 
-    const setProject = async (data: string) => {
+
+    const setProject = async (imgData: string) => {
         const userData: any = queryClient.getQueryData("userData")
         databases.updateDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id as string, {
-            data: data.toString(),
-            edited_by: userData?.email
-        }).then(d => console.log("Done")).catch(err => console.log(err))
+            data: imgData.toString(),
+            edited_by: data?.email
+        }).then(d => console.log("updated")).catch(err => console.log(err))
     }
 
 
     useEffect(() => {
         setCurrentState(null)
         const unsubscribe = client.subscribe([`databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.${id}`, 'files'], (response: any) => {
-            if (response.payload.edited_by !== data.email) {
+            if (response.payload.edited_by !== data?.email) {
                 setImage(response.payload.data, canvasRef)
             }
         });
@@ -57,19 +60,17 @@ const Canvas = ({ color }: props) => {
 
 
     useEffect(() => {
-        window.onscroll = () => {}
         const canvas: HTMLCanvasElement | null = canvasRef.current
         if (canvas) {
             canvas.height = window.innerHeight
             canvas.width = window.innerWidth
-            // canvas.width = window.innerWidth<1288?window.innerHeight:window.innerWidth * .75;
             const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
             if (context) {
                 context.clearRect(0, 0, canvas.width, canvas.height)
-                
+
                 if (projectData?.data && projectData?.data !== "null") {
                     setImage(projectData.data, canvasRef)
-                    setStack((stack)=>[data])
+                    setStack((stack) => [data])
                 }
                 else {
                     const data = canvas.toDataURL()
@@ -89,7 +90,7 @@ const Canvas = ({ color }: props) => {
             <Link href="/dashboard" className={`absolute left-3 rounded-md bg-green-400/70 top-3 text-white p-2`}>
                 <MdArrowBack />
             </Link>
-            <img src="/pattern.svg" id="sbgImage" style={{ display: "none" }} ref={patternRef} alt="" />
+
 
             <canvas
                 onTouchStart={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY)}
