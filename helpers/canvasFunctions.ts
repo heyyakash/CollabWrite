@@ -14,7 +14,7 @@ const blurListener = (
     y: number
 ) => {
     const text = textInput.value;
-    context.font = "26px Montserrat"
+    context.font = "bold 26px Indie Flower"
     context.fillStyle = color
     context.fillText(text, x, y);
     setDisplayText("none")
@@ -82,8 +82,10 @@ export const startDrawing = (
                     textInput.removeEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY) as any)
                 }
             }
+            setIsDrawing(false)
         }
         else{
+            // setIsDrawing(false)
             setDisplayText("hidden")
         }
     }
