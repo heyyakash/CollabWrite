@@ -40,6 +40,7 @@ export const startDrawing = (
     lastY: number
 
 ) => {
+    console.log("touched")
     setIsDrawing(true)
     setCursor(true)
     if ("touches" in e) {

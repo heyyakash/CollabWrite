@@ -98,6 +98,7 @@ const Canvas = ({ color, projectData, data }: props) => {
             </div>
 
             <canvas
+                className="touch-none"
                 onTouchStart={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY,shape,color,canvasRef,textBoxRef, textInputRef, setDisplayText,lastX,lastY)}
                 onTouchMove={(e) => draw(e, isDrawing, canvasRef, color, shape, setCurrentX, setCurrentY, currentX, currentY, setElemArr, lastX, lastY, setLastX, setLastY)}
                 onTouchEnd={(e) => stopDrawing(e, canvasRef, setCursor, setIsDrawing, elemArr, color, shape, setElemArr, stack, setStack, setTop, setCurrentState, setProject)}
