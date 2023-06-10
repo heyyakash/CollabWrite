@@ -1,7 +1,25 @@
-import { canvasRef, mouseEvent, setStateBoolean, setStateCurrentState, setStateElements, setStateNumber, setStateString, setStateStringArray } from "@/types/canvasTypes"
+import { canvasRef, mouseEvent, setStateBoolean, setStateCurrentState, setStateElements, setStateNumber, setStateString, setStateStringArray, textBoxRef, textInputRef } from "@/types/canvasTypes"
 import { elements } from "@/types/elements"
 import { shapes } from "@/types/shapes"
 import React from "react"
+
+
+//function to handle blur event listener
+const blurListener = (
+    textInput: HTMLInputElement,
+    context: CanvasRenderingContext2D,
+    color: string,
+    setDisplayText: setStateString,
+    x: number,
+    y: number
+) => {
+    const text = textInput.value;
+    context.font = "26px Montserrat"
+    context.fillStyle = color
+    context.fillText(text, x, y);
+    setDisplayText("none")
+    textInput.value = '';
+}
 
 //function to start drawing
 export const startDrawing = (
@@ -11,7 +29,15 @@ export const startDrawing = (
     setLastX: setStateNumber,
     setLastY: setStateNumber,
     setCurrentX: setStateNumber,
-    setCurrentY: setStateNumber
+    setCurrentY: setStateNumber,
+    shape: string,
+    color: string,
+    canvasRef: canvasRef,
+    textBoxRef: textBoxRef,
+    textInputRef: textInputRef,
+    setDisplayText: setStateString,
+    lastX: number,
+    lastY: number
 
 ) => {
     setIsDrawing(true)
@@ -28,6 +54,40 @@ export const startDrawing = (
         setCurrentX(e.clientX)
         setCurrentY(e.clientY)
     }
+    const canvas = canvasRef.current
+    const context = canvas?.getContext("2d")
+    if (context) {
+        if (shape === "text") {
+            setDisplayText("block")
+            console.log("Here")
+            let x: number, y: number
+            if ('touches' in e) {
+                x = e.touches[0].clientX
+                y = e.touches[0].clientY
+            }
+            else {
+                x = e.clientX
+                y = e.clientY
+            }
+            const textbox = textBoxRef.current
+            const textInput = textInputRef.current
+            if (textbox && textInput) {
+
+                textbox.style.left = x + 'px';
+                textbox.style.top = y + 'px';
+
+                if (textInput) {
+                    textInput.focus();
+                    textInput.addEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY) as any);
+                    textInput.removeEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY) as any)
+                }
+            }
+        }
+        else{
+            setDisplayText("hidden")
+        }
+    }
+
 
 }
 
@@ -138,8 +198,7 @@ export const draw = (
                 context.strokeStyle = color;
 
             }
-
-            else {
+            else if (shape === "free") {
                 context.moveTo(lastX, lastY);
                 if ('touches' in e) {
                     context.lineTo(e.touches[0].clientX, e.touches[0].clientY);

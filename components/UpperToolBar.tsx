@@ -36,6 +36,9 @@ const UpperToolBar = ({setShape, shape, clear, undo, download}:props) => {
             <div onClick={() => setShape("erasure")} className={`p-1 ${shape === "erasure" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <BsEraser className='cursor-pointer text-lg' />
             </div>
+            <div onClick={() => setShape("text")} className={`p-1 ${shape === "text" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
+                <p className = 'text-sm px-1'>A</p>
+            </div>
             <div className='bg-white/80 h-6 w-[2px]'></div>
             <div onClick={() => undo()} className={`p-1   cursor-pointer rounded-md`}>
                 <BiUndo className='cursor-pointer text-lg' />

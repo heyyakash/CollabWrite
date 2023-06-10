@@ -51,7 +51,6 @@ export const undo = (canvasRef: canvasRef, top: number, setCurrentState: setStat
             const context = canvas.getContext("2d")
             if (context) {
                 context.clearRect(0, 0, canvas.width, canvas.height)
-                // context.globalAlpha = 1
             }
         }
         setTop(top - 1)

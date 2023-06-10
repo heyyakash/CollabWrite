@@ -17,8 +17,9 @@ type props = {
     data: any
 }
 
-const Canvas = ({ color , projectData, data}: props) => {
+const Canvas = ({ color, projectData, data }: props) => {
     const router = useRouter()
+    const [displayText,setDisplayText] = useState("hidden")
     const { id } = router.query
     const { client, account, databases } = getInitialClient()
     const queryClient = useQueryClient()
@@ -37,10 +38,11 @@ const Canvas = ({ color , projectData, data}: props) => {
     const [stack, setStack] = useState<string[]>([])
     const [top, setTop] = useState<number>(-1)
     const [shape, setShape] = useState<shapes>("free")
+    const textBoxRef = useRef<HTMLDivElement>(null)
+    const textInputRef = useRef<HTMLInputElement>(null)
 
 
     const setProject = async (imgData: string) => {
-        const userData: any = queryClient.getQueryData("userData")
         databases.updateDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id as string, {
             data: imgData.toString(),
             edited_by: data?.email
@@ -91,17 +93,20 @@ const Canvas = ({ color , projectData, data}: props) => {
                 <MdArrowBack />
             </Link>
 
+            <div ref = {textBoxRef} className={`absolute ${displayText}`}>
+                <input type="text" className={`text-xl bg-transparent placeholder:text-white/80 placeholder:text-bold text-white`}  ref = {textInputRef} placeholder="Enter text" />
+            </div>
 
             <canvas
-                onTouchStart={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY)}
+                onTouchStart={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY,shape,color,canvasRef,textBoxRef, textInputRef, setDisplayText,lastX,lastY)}
                 onTouchMove={(e) => draw(e, isDrawing, canvasRef, color, shape, setCurrentX, setCurrentY, currentX, currentY, setElemArr, lastX, lastY, setLastX, setLastY)}
                 onTouchEnd={(e) => stopDrawing(e, canvasRef, setCursor, setIsDrawing, elemArr, color, shape, setElemArr, stack, setStack, setTop, setCurrentState, setProject)}
-                onMouseDown={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY)}
+                onMouseDown={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY,shape,color,canvasRef,textBoxRef, textInputRef, setDisplayText,lastX,lastY)}
                 onMouseMove={(e) => draw(e, isDrawing, canvasRef, color, shape, setCurrentX, setCurrentY, currentX, currentY, setElemArr, lastX, lastY, setLastX, setLastY)}
                 onMouseUp={(e) => stopDrawing(e, canvasRef, setCursor, setIsDrawing, elemArr, color, shape, setElemArr, stack, setStack, setTop, setCurrentState, setProject)}
                 ref={canvasRef}
             />
-
+        
         </>
     );
 };
