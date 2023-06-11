@@ -31,7 +31,7 @@ const CanvasContainer = ({id}:props) => {
     const [color, setColor] = useState<string>("white")
     if(!isLoading && !isError)
     return (
-        <div className=' relative h-screen w-full xl:w-[75%] '>
+        <div className=' relative h-screen w-full'>
             <div className='absolute bg-black/20 left-4 rounded-xl top-[50%] -translate-y-[50%] flex flex-col items-center gap-2 p-4'>
                 <BsPenFill className="text-white my-2 " />
                 {list.map((x: string, i: number) => {
