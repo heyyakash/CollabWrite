@@ -1,7 +1,7 @@
 import getInitialClient from '@/helpers/getClient'
 import { Account, Client, Databases, ID } from 'appwrite'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 type SignInDetails = {
@@ -17,17 +17,18 @@ type SignUpDetails = SignInDetails & {
 
 const Login = () => {
     const router = useRouter()
-    const {client, account, databases} = getInitialClient()
+    const { client, account, databases } = getInitialClient()
+    const [loading, setLoading] = useState(false)
     const { register: signUpRegister, handleSubmit } = useForm<SignUpDetails>()
     const { register: signInRegister, handleSubmit: loginHandleSubmit } = useForm<SignInDetails>()
 
 
-    useEffect(()=>{
-        account.get().then(()=>{router.push('/dashboard')}).catch(()=>console.log("No users"))
-    },[])
+    useEffect(() => {
+        account.get().then(() => { router.push('/dashboard') }).catch(() => console.log("No users"))
+    }, [])
 
     const handleSignUp = (data: SignUpDetails) => {
-        console.log(data)
+        setLoading(true)
         account.create(
             ID.unique(),
             data.email,
@@ -44,18 +45,19 @@ const Login = () => {
                     .catch(err => console.log(err))
             })
             .catch((err) => console.log(err))
-
+        setLoading(false)
     }
 
     const handleSignIn = (data: SignInDetails) => {
 
-
+        setLoading(true)
         const promise = account.createEmailSession(data.email, data.password);
 
         promise.then(function (response) {
             router.push("/dashboard")
         }, function (error) {
             alert(error)
+            setLoading(false)
         });
     }
 
@@ -69,7 +71,9 @@ const Login = () => {
                     <p className='text-sm font-semibold'>Sign In</p>
                     <input required {...signInRegister("email")} type="text" placeholder='email' className='primary-input' />
                     <input required {...signInRegister("password")} type="password" placeholder='password' className='primary-input' />
-                    <input type="submit" value="Sign In" className='primary-input primary-gradient text-black font-semibold cursor-pointer ' />
+                    <button type="submit" value="Sign In" className='primary-input primary-gradient grid place-items-center text-snc text-black font-semibold cursor-pointer '>
+                        {loading ? (<img src="/loading2.gif" className='w-7 h-7' alt="loading" />) : "Log in"}
+                    </button>
                 </form>
 
                 <p className='text-2xl font-bold'>/</p>
@@ -82,8 +86,10 @@ const Login = () => {
                     </div>
                     <input required type="email" {...signUpRegister("email")} placeholder='email' className='primary-input' />
                     <div className='flex gap-3'>
-                        <input required type="password" {...signUpRegister("password")} placeholder='password' className='primary-input w-[calc(270px-.375rem)]' />
-                        <input type="submit" value="Sign Up" className='primary-input primary-gradient p-0 cursor-pointer trans  text-black font-semibold w-[calc(100px-.375rem)]' />
+                        <input required type="password" {...signUpRegister("password")} placeholder='password' className='primary-input w-[calc(270px-0.9rem)]' />
+                        <button type="submit" value="Sign In" className='primary-input primary-gradient grid place-items-center text-black text-sm font-semibold cursor-pointer w-[calc(100px)]'>
+                        {loading ? (<img src="/loading2.gif" className='w-7 h-7' alt="loading" />) : (<p>Sign Up</p>)}
+                    </button>
                     </div>
 
                 </form>
