@@ -62,6 +62,7 @@ const Canvas = ({ color, projectData, data }: props) => {
 
 
     useEffect(() => {
+        window.scrollTo(0,0)
         const canvas: HTMLCanvasElement | null = canvasRef.current
         if (canvas) {
             canvas.height = window.innerHeight
