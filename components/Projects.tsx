@@ -3,7 +3,7 @@ import deleteProject from '@/helpers/deleteProjects'
 import getInitialClient from '@/helpers/getClient'
 import { Account, Client, Databases, Models, Query } from 'appwrite'
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsFillTrash2Fill } from 'react-icons/bs'
 import { RxCross2 } from 'react-icons/rx'
 import { useQuery, useQueryClient } from 'react-query'
@@ -34,7 +34,6 @@ const Projects = ({ show, setShow }: propTypes) => {
     const userData: any = queryClient.getQueryData("userData")
 
 
-
     const { data: projects, error, isLoading } = useQuery<(Models.Document)[]>("projects", () => getProjects(databases, userData["$id"]))
 
     if(isLoading){
@@ -43,7 +42,8 @@ const Projects = ({ show, setShow }: propTypes) => {
         )
     }
     return (
-        <section className='my-[3rem] pb-[1.75rem] bg-white/10 p-6 bg-[url("/pattern2.png")]   rounded-lg drop-shadow-xl'>
+        <section className='my-[3rem] pb-[1.75rem] bg-white/10 p-6 bg-[url("/wave.svg")] bg-cover bg-no-repeat  rounded-lg drop-shadow-xl'>
+            <div className=" absolute z-[-999] bg-black/20 inset-0"></div>
             <h2 className='text-xl font-semibold'>Your Drawing Boards</h2>
             <div className='flex flex-wrap items-center gap-6 mt-8'>
                 {!error && projects?.map((x) =>

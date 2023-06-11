@@ -76,9 +76,9 @@ export const startDrawing = (
 
                 textbox.style.left = x + 'px';
                 textbox.style.top = y + 'px';
-
                 if (textInput) {
-                    textInput.focus();
+                    console.log(textInput)
+                    textInput.focus()
                     textInput.addEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY) as any);
                     textInput.removeEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY) as any)
                 }

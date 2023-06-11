@@ -21,7 +21,7 @@ const Chat = ({id}:{id:string}) => {
     const [chatId, setChatId] = useState<string>("")
     const [msg,setMsg] = useState<string>("")
     const {client} = getInitialClient()
-    const { error: chatError, isLoading:chatIsLoading} = useQuery("chats", ()=>getChats(id as string),{
+    const { isError, isLoading:chatIsLoading} = useQuery("chats", ()=>getChats(id as string),{
         onSuccess(data) {
             if (data.documents.length>0) {
                 console.log(data.documents)
@@ -52,7 +52,7 @@ const Chat = ({id}:{id:string}) => {
 if(chatIsLoading) return(
     <div className='w-screen h-screen'><Loading /></div>
   )
-   
+   if(!isError && chats)
     return (
         <div className='w-[25%] h-screen hidden xl:flex items-center px-5  '>
         <div className='w-full flex flex-col rounded-md drop-shadow-2xl h-[calc(100%-2rem)] relative overflow-hidden text-white  bg-black/50'>

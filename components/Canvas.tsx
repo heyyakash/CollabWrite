@@ -94,7 +94,7 @@ const Canvas = ({ color, projectData, data }: props) => {
             </Link>
 
             <div ref = {textBoxRef} className={`absolute ${displayText}`}>
-                <input type="text" className={`text-xl bg-transparent placeholder:text-white/80 placeholder:text-bold text-white`}  ref = {textInputRef} placeholder="Enter text" />
+                <input id = "textInput" type="text" className={`text-xl bg-transparent placeholder:text-white/80 placeholder:text-bold text-white`}  ref = {textInputRef} placeholder="Click to type" />
             </div>
 
             <canvas

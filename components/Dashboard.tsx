@@ -10,13 +10,16 @@ import AddProject from './AddProject'
 import getClient from '@/helpers/getUser'
 import getInitialClient from '@/helpers/getClient'
 import Loading from './Loading'
+import AddProjectModal from './AddProjectModal'
 
 
 
 
 const Dashboard = () => {
     const router = useRouter()
-    const [show, setShow] = useState<boolean>(false)
+    // const [show, setShow] = useState<boolean>(false)
+    let [isOpen, setIsOpen] = useState<boolean>(false)
+
     const queryClient = useQueryClient()
     // const projects : any= queryClient.getQueryData("projects")
     const {client, account, databases} = getInitialClient()
@@ -54,8 +57,9 @@ const Dashboard = () => {
     
                 </div>
        
-                <Projects show = {show} setShow = {setShow} />
-                <AddProject show = {show} setShow = {setShow} />
+                <Projects show = {isOpen} setShow = {setIsOpen} />
+                {/* <AddProject show = {show} setShow = {setShow} /> */}
+                <AddProjectModal setIsOpen={setIsOpen} isOpen = {isOpen}/>
   
             </section>
         </main>
