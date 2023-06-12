@@ -5,5 +5,7 @@ export type elements = {
     lastY: number,
     radius?: number
     currentX?: number,
-    currentY?: number
+    currentY?: number,
+    clientX?:number,
+    clientY?:number
 }

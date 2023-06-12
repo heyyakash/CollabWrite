@@ -37,7 +37,7 @@ const Canvas = ({ color, projectData, data }: props) => {
     const [cursor, setCursor] = useState<boolean>(false)
     const [stack, setStack] = useState<string[]>([])
     const [top, setTop] = useState<number>(-1)
-    const [shape, setShape] = useState<shapes>("free")
+    const [shape, setShape] = useState<shapes>("line")
     const textBoxRef = useRef<HTMLDivElement>(null)
     const textInputRef = useRef<HTMLInputElement>(null)
 

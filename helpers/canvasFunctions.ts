@@ -219,14 +219,14 @@ export const draw = (
                 if ('touches' in e) {
                     x = e.touches[0].clientX
                     y = e.touches[0].clientX
-                    setCurrentX(e.touches[0].clientX)
-                    setCurrentY(e.touches[0].clientY)
+                    // setCurrentX(e.touches[0].clientX)
+                    // setCurrentY(e.touches[0].clientY)
                 }
                 else {
                     x = e.clientX
                     y = e.clientY
-                    setCurrentX(e.clientX)
-                    setCurrentY(e.clientY)
+                    // setCurrentX(e.clientX)
+                    // setCurrentY(e.clientY)
                 }
                 context.lineWidth = 4
 
@@ -237,12 +237,12 @@ export const draw = (
                 context.stroke()
 
                 if ('touches' in e) {
-                    setLastX(e.touches[0].clientX)
-                    setLastY(e.touches[0].clientY)
+                    setLastX(x)
+                    setLastY(y)
                 }
                 else {
-                    setLastX(e.clientX)
-                    setLastY(e.clientY)
+                    setLastX(x)
+                    setLastY(y)
                 }
             }
 
@@ -261,7 +261,7 @@ export const stopDrawing = (e: mouseEvent, canvasRef: canvasRef, setCursor: setS
         const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
         if (context) {
             if (elemArr.length > 0) {
-                const { lastX, lastY, width, height, radius, currentX, currentY } = elemArr[elemArr.length - 1]
+                const { lastX, lastY, width, height, radius, currentX, currentY,clientX,clientY } = elemArr[elemArr.length - 1]
                 context.lineWidth = 4
                 context.strokeStyle = color
                 context.fillStyle = color
@@ -303,14 +303,16 @@ export const stopDrawing = (e: mouseEvent, canvasRef: canvasRef, setCursor: setS
                         context.restore();
                     }
                 }
-                else if (shape === "line") {
+                else if (shape === "line" && clientX && clientY) {
                     context.moveTo(lastX, lastY);
-                    if ('touches' in e) {
-                        context.lineTo(e.touches[0].clientX, e.touches[0].clientY)
-                    }
-                    else {
-                        context.lineTo(e.clientX, e.clientY)
-                    }
+                    context.lineTo(clientX,clientY)
+                    // if ('touches' in e) {
+                    //     console.log(e.touches)
+                    //     context.lineTo(clientX, clientY)
+                    // }
+                    // else {
+                    //     context.lineTo(e.clientX, e.clientY)
+                    // }
                     context.stroke()
                 }
                 context.stroke()

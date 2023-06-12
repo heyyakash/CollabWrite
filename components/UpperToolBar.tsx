@@ -33,7 +33,7 @@ const UpperToolBar = ({setShape, shape, clear, undo, download}:props) => {
             <div onClick={() => setShape("line")} className={`p-1 ${shape === "line" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <GiStraightPipe className='cursor-pointer text-lg' />
             </div>
-            <div onClick={() => setShape("free")} className={`p-1 ${shape === "free" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
+            <div onClick={() => setShape("free")} className={`p-1 ${shape === "free" ? "bg-green-500/70 text-white" : ""}  hidden xl:block cursor-pointer rounded-md`}>
                 <BsPencil className='cursor-pointer text-lg' />
             </div>
             <div onClick={() => setShape("erasure")} className={`p-1 ${shape === "erasure" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
