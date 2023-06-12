@@ -175,7 +175,7 @@ export default function MyModal({ isOpen, setIsOpen }: props) {
                                                         })
                                                     }
 
-                                                    <button onClick={() => router.push(`projects/${projectId}`)} disabled={invitations.length === 0} className='bg-black/10 rounded-md p-3 grid place-items-center  w-full font-medium hover:bg-white trans text-white hover:text-black'>
+                                                    <button onClick={() => router.push(`projects/${projectId}`)}  className='bg-black/10 rounded-md p-3 grid place-items-center  w-full font-medium hover:bg-white trans text-white hover:text-black'>
                                                         {loading ? (<img src="/loading.gif" className='w-7 h-7' alt="loading" />) : "Get Started"}
                                                     </button>
 
