@@ -58,7 +58,7 @@ const DashboardNav = () => {
                     <div onClick={() => setShow(!show)} className='trans hover:bg-white/20 p-2 rounded-full relative'>
                         {invitations?.length>0 && <div className='bg-red-500 h-1 rounded-full w-1 absolute right-2'></div>}
                         <BiBell  className='hover:text-white trans' />
-                        <div className={`${show ? "flex" : "hidden"} flex-col p-2 rounded-xl   absolute w-[500px] min-h-[100px] bg-black border-[1px] border-white/20 left-[-15rem] top-10`}>
+                        <div className={`${show ? "flex" : "hidden"} flex-col p-2 rounded-xl w-[320px] left-[-13rem]  absolute md:w-[500px] min-h-[100px] bg-black border-[1px] border-white/20 md:left-[-25rem] xl:left-[-15rem] top-10`}>
                             {!isLoading && !error &&invitations.length>0 ?
                                 invitations?.map((x: any, i: number) => <NotificationBox key={i} data={x} />) : 
                                 (<div className='grid place-items-center text-md font-bold h-[100px] text-white/50'>No new notifications</div>)}

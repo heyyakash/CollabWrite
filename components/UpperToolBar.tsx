@@ -17,7 +17,7 @@ type props = {
 const UpperToolBar = ({setShape, shape, clear, undo, download}:props) => {
     
     return (
-        <div className='absolute text-xl flex p-3 items-center gap-3 top-2 left-[50%] -translate-x-[50%] bg-black/20 text-white rounded-md'>
+        <div className='absolute w-[90%] flex-wrap md:w-auto text-xl flex p-3 items-center gap-3 top-2 left-[50%] -translate-x-[50%] bg-black/20 text-white rounded-md'>
             <div onClick={() => setShape("square")} className={`p-1 ${shape === "square" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <BiSquare />
             </div>

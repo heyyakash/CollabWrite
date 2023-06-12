@@ -90,7 +90,7 @@ const Canvas = ({ color, projectData, data }: props) => {
             {/* <div style={{ top: lastY, left: lastX, width: currentX - lastX, height: currentY - lastY }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape==="circle"?"block":"hidden"} top-10`}></div> */}
             <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: (currentY - lastY) }} className={`absolute border-2 border-white/30  h-5 w-5 ${cursor && shape === "square" ? "block" : "hidden"} top-10`}></div>
             <div style={{ top: lastY, left: lastX, width: (currentX - lastX), height: "5px" }} className={`absolute border-2 border-white/30 ${shape === "circle" ? "rounded-full" : ""} h-5 w-5 ${cursor && shape === "circle" ? "block" : "hidden"} top-10`}></div>
-            <Link href="/dashboard" className={`absolute left-3 rounded-md bg-green-400/70 top-3 text-white p-2`}>
+            <Link href="/dashboard" className={`absolute left-3 rounded-md hidden md:block bg-green-400/70 top-3 text-white p-2`}>
                 <MdArrowBack />
             </Link>
 
