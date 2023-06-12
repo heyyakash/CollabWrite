@@ -43,7 +43,7 @@ const Canvas = ({ color, projectData, data }: props) => {
 
 
     const setProject = async (imgData: string) => {
-        databases.updateDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id as string, {
+        databases.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB as string, process.env.NEXT_PUBLIC_APPWRITE_DB_PROJECTS_COLLN as string, id as string, {
             data: imgData.toString(),
             edited_by: data?.email
         }).then(d => console.log("updated")).catch(err => console.log(err))
@@ -52,7 +52,7 @@ const Canvas = ({ color, projectData, data }: props) => {
 
     useEffect(() => {
         setCurrentState(null)
-        const unsubscribe = client.subscribe([`databases.6475e4e81155c46f87b6.collections.6475f82bb6f201570328.documents.${id}`, 'files'], (response: any) => {
+        const unsubscribe = client.subscribe([`databases.${process.env.NEXT_PUBLIC_APPWRITE_DB as string}.collections.${process.env.NEXT_PUBLIC_APPWRITE_DB_PROJECTS_COLLN as string}.documents.${id}`, 'files'], (response: any) => {
             if (response.payload.edited_by !== data?.email) {
                 setImage(response.payload.data, canvasRef)
             }

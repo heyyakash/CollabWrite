@@ -65,9 +65,9 @@ const DashboardNav = () => {
 
                         </div>
                     </div>
-                    <div className='trans hover:bg-white/20 p-2 rounded-full'>
+                    {/* <div className='trans hover:bg-white/20 p-2 rounded-full'>
                         <FiSettings className='hover:text-white trans' />
-                    </div>
+                    </div> */}
                     <div onClick={handleLogOut} className='trans hover:bg-white/20 p-2 rounded-full'>
                         <FiLogOut  className='hover:text-red-400 trans' />
                     </div>
@@ -83,7 +83,7 @@ const NotificationBox = ({ data }: any) => {
     // console.log(data)
     const queryClient = useQueryClient()
     const userData:any = queryClient.getQueryData("userData")
-    const {client, account, databases} = getInitialClient()
+    const {databases} = getInitialClient()
     const deleteInvitaion = (id: string) => {
         databases.deleteDocument("6475e4e81155c46f87b6", "6475fafb1adfd9a909c5", id).then((e) => queryClient.invalidateQueries("invitations"))
     }
