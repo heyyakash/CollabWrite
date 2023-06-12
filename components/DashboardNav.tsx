@@ -52,7 +52,7 @@ const DashboardNav = () => {
             <div className='h-full mx-auto px-3 xl:px-0 max-w-[1200px] flex items-center justify-between'>
                 <div className="flex items-center gap-2">
                     <MdHandshake className='text-3xl' />
-                    <h3 className='font-bold primary-gradient text-transparent bg-clip-text'>Collaborate</h3>
+                    <h3 className='font-bold primary-gradient text-transparent bg-clip-text'>CollabWrite</h3>
                 </div>
                 <div className='flex text-xl trans text-white/50 items-center cursor-pointer  gap-2'>
                     <div onClick={() => setShow(!show)} className='trans hover:bg-white/20 p-2 rounded-full relative'>
