@@ -19,7 +19,7 @@ const Login = () => {
     const router = useRouter()
     const { client, account, databases } = getInitialClient()
     const [loading, setLoading] = useState(false)
-    const { register: signUpRegister, handleSubmit } = useForm<SignUpDetails>()
+    const { register: signUpRegister, handleSubmit, getValues } = useForm<SignUpDetails>()
     const { register: signInRegister, handleSubmit: loginHandleSubmit } = useForm<SignInDetails>()
 
 
@@ -36,12 +36,17 @@ const Login = () => {
             data.fname.charAt(0).toUpperCase() + data.fname.slice(1) + " " + data.lname.charAt(0).toUpperCase() + data.lname.slice(1)
         )
             .then((d) => {
-                databases.createDocument("6475e4e81155c46f87b6", "6475e4fa4c0ac8bdb6cc", ID.unique(), {
+                databases.createDocument(process.env.NEXT_PUBLIC_APPWRITE_DB as string, process.env.NEXT_PUBLIC_APPWRITE_DB_USERS_COLLN as string, ID.unique(), {
                     email: data.email,
                     uid: d["$id"],
                     name: d["name"]
                 })
-                    .then(d => alert("Account Created Successfully"))
+                    .then(d => {
+                        alert("Account Created Successfully")
+                        const {email,password} = getValues()
+                        handleSignIn({email, password})
+                        // handleSignIn({})
+                    })
                     .catch(err => console.log(err))
             })
             .catch((err) => console.log(err))
@@ -64,7 +69,7 @@ const Login = () => {
     return (
         <section className='min-h-screen w-full flex items-center justify-center flex-col gap-2 bg-[#121212] text-white'>
             <h2 className='text-center text-[2.5rem] font-[700]'>Login to Your Account</h2>
-            <p className='text-lg md:w-[500px] text-white/40 text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, saepe?</p>
+            <p className='text-lg md:w-[500px] text-white/40 text-center'>Drag your way into an extraordinary experience and unleash the possibilities within our platform </p>
             <div className='flex flex-col lg:flex-row gap-5 items-center mt-5 justify-center xl:justify-evenly w-full max-w-[700px]'>
 
                 <form onSubmit={loginHandleSubmit(handleSignIn)} className='p-4 flex flex-col gap-3'>
