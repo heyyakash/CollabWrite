@@ -158,7 +158,7 @@ export default function MyModal({ isOpen, setIsOpen }: props) {
                                                     {searchResult.length !== 0 ? <div className='w-full rounded-xl bg-white/20 max-h-[300px] p-1  mt-3 overflow-auto'>
                                                         {searchResult.map((x: any, i: number) => {
                                                             return (
-                                                                <div onClick={() => sendInvitation(x.email, x.name)} key={i} className='first:mt-3 flex p-4 trans hover:primary-gradient  hover:text-black rounded-xl cursor-pointer items-center justify-between'>
+                                                                <div onClick={() => sendInvitation(x.email, x.name)} key={i} className='my-2 flex p-4 trans hover:primary-gradient  hover:text-black rounded-xl cursor-pointer items-center justify-between'>
                                                                     <p>{x.email}</p>
                                                                     <p className='font-semibold'>{x.name}</p>
                                                                 </div>
@@ -170,12 +170,12 @@ export default function MyModal({ isOpen, setIsOpen }: props) {
 {
                                                         invitations.map((x: { name: string, email: string }) => {
                                                             return (
-                                                                <div key={x.email} className='bg-white w-full flex items-center my-2 rounded-md p-2 text-black font-semibold '>{x.email} <p className='ml-2 text-sm font-normal'>(Invitaion sent)</p></div>
+                                                                <div key={x.email} className='bg-white w-[98%] flex items-center my-2 rounded-md p-2 py-[0.75rem] text-black font-semibold '>{x.email} <p className='ml-auto text-sm font-normal'>(Invitaion sent)</p></div>
                                                             )
                                                         })
                                                     }
 
-                                                    <button onClick={() => router.push(`projects/${projectId}`)}  className='bg-black/10 rounded-md p-3 grid place-items-center  w-full font-medium hover:bg-white trans text-white hover:text-black'>
+                                                    <button onClick={() => router.push(`projects/${projectId}`)}  className='bg-black/10 rounded-md mt-2 p-3 grid place-items-center  w-full font-medium hover:bg-white trans text-white hover:text-black'>
                                                         {loading ? (<img src="/loading.gif" className='w-7 h-7' alt="loading" />) : "Get Started"}
                                                     </button>
 
