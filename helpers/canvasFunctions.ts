@@ -12,7 +12,10 @@ const blurListener = (
     setDisplayText: setStateString,
     x: number,
     y: number,
-    setProject:(imgData: string) => Promise<void>
+    setProject: (imgData: string) => Promise<void>,
+    stack: string[],
+    setStack: setStateStringArray,
+    setTop: setStateNumber,
 ) => {
     const text = textInput.value;
     context.font = "bold 26px Indie Flower"
@@ -21,6 +24,8 @@ const blurListener = (
     setDisplayText("none")
     textInput.value = '';
     const data = context.canvas.toDataURL()
+    setStack(stack=>[...stack, data])
+    setTop(stack.length-1)
     setProject(data)
 }
 
@@ -41,7 +46,11 @@ export const startDrawing = (
     setDisplayText: setStateString,
     lastX: number,
     lastY: number,
-    setProject:(imgData: string) => Promise<void>
+    setProject: (imgData: string) => Promise<void>,
+    stack: string[],
+    setStack: setStateStringArray,
+    setTop: setStateNumber,
+
 
 ) => {
     console.log("touched")
@@ -83,13 +92,13 @@ export const startDrawing = (
                 if (textInput) {
                     console.log(textInput)
                     textInput.focus()
-                    textInput.addEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY,setProject) as any);
-                    textInput.removeEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY,setProject) as any)
+                    textInput.addEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY, setProject , stack, setStack,setTop) as any);
+                    textInput.removeEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY, setProject , stack, setStack,setTop) as any)
                 }
             }
             setIsDrawing(false)
         }
-        else{
+        else {
             // setIsDrawing(false)
             setDisplayText("hidden")
         }
@@ -124,7 +133,7 @@ export const draw = (
         const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
         if (context) {
             context.strokeStyle = color
-            if (shape === "square") {
+            if (shape === "square" || shape === "diamond") {
                 if ('touches' in e) {
                     setCurrentX(e.touches[0].clientX)
                     setCurrentY(e.touches[0].clientY)
@@ -135,7 +144,7 @@ export const draw = (
                 }
                 const width = (currentX - lastX)
                 const height = (currentY - lastY)
-                setElemArr((elemArr) => [...elemArr, { lastX, lastY, width, height }])
+                setElemArr((elemArr) => [...elemArr, { lastX, lastY, width, height, currentX, currentY }])
 
 
             }
@@ -205,17 +214,28 @@ export const draw = (
                 context.strokeStyle = color;
 
             }
-            else if (shape === "free") {
-                context.moveTo(lastX, lastY);
+            else {
+                let x, y
                 if ('touches' in e) {
-                    context.lineTo(e.touches[0].clientX, e.touches[0].clientY);
+                    x = e.touches[0].clientX
+                    y = e.touches[0].clientX
+                    setCurrentX(e.touches[0].clientX)
+                    setCurrentY(e.touches[0].clientY)
                 }
                 else {
-                    context.lineTo(e.clientX, e.clientY);
+                    x = e.clientX
+                    y = e.clientY
+                    setCurrentX(e.clientX)
+                    setCurrentY(e.clientY)
                 }
+                context.lineWidth = 4
 
-                context.stroke();
-                context.fill()
+                context.strokeStyle = color
+                context.beginPath();
+                context.moveTo(lastX, lastY)
+                context.lineTo(x, y)
+                context.stroke()
+
                 if ('touches' in e) {
                     setLastX(e.touches[0].clientX)
                     setLastY(e.touches[0].clientY)
@@ -234,10 +254,10 @@ export const draw = (
 
 //function to stop drawing
 export const stopDrawing = (e: mouseEvent, canvasRef: canvasRef, setCursor: setStateBoolean, setIsDrawing: setStateBoolean, elemArr: elements[], color: string, shape: shapes, setElemArr: setStateElements, stack: string[], setStack: setStateStringArray, setTop: setStateNumber, setCurrentState: setStateCurrentState, setProject: (data: any) => Promise<void>) => {
-    setCursor(false)
     setIsDrawing(false)
+    setCursor(false)
     const canvas: HTMLCanvasElement | null = canvasRef.current
-    if (canvas) {
+    if (canvas && shape !== "free") {
         const context: CanvasRenderingContext2D | null = canvas.getContext("2d")
         if (context) {
             if (elemArr.length > 0) {
@@ -249,6 +269,15 @@ export const stopDrawing = (e: mouseEvent, canvasRef: canvasRef, setCursor: setS
                 context.beginPath()
                 if (shape === "square") {
                     context.rect(lastX, lastY, width ? width : 0, height ? height : 0)
+             
+                }
+                else if(shape ==="diamond" && width && height){
+                    context.moveTo(lastX, lastY);
+                    context.lineTo(lastX - width / 2, lastY + height / 2);
+                    context.lineTo(lastX, lastY + height);
+                    context.lineTo(lastX + width / 2, lastY + height / 2);
+                    context.closePath();
+  
                 }
                 else if (shape === "circle") {
                     context.arc(lastX, lastY, radius ? radius : 0, 0, 2 * Math.PI);

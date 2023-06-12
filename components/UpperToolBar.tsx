@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BsArrowUpRight, BsCircle, BsEraser, BsPenFill, BsPencil } from 'react-icons/bs'
+import { BsArrowUpRight, BsCircle, BsDiamond, BsEraser, BsPenFill, BsPencil } from 'react-icons/bs'
 import { BiSquare, BiUndo } from 'react-icons/bi'
 import { shapes } from '@/types/shapes'
 import { AiOutlineDownload } from 'react-icons/ai'
@@ -26,6 +26,9 @@ const UpperToolBar = ({setShape, shape, clear, undo, download}:props) => {
             </div>
             <div onClick={() => setShape("arrow")} className={`p-1 ${shape === "arrow" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <BsArrowUpRight className='cursor-pointer text-lg' />
+            </div>
+            <div onClick={() => setShape("diamond")} className={`p-1 ${shape === "diamond" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
+                <BsDiamond className='cursor-pointer text-lg' />
             </div>
             <div onClick={() => setShape("line")} className={`p-1 ${shape === "line" ? "bg-green-500/70 text-white" : ""}  cursor-pointer rounded-md`}>
                 <GiStraightPipe className='cursor-pointer text-lg' />

@@ -100,10 +100,10 @@ const Canvas = ({ color, projectData, data }: props) => {
 
             <canvas
                 className="touch-none"
-                onTouchStart={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY,shape,color,canvasRef,textBoxRef, textInputRef, setDisplayText,lastX,lastY,setProject)}
+                onTouchStart={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY,shape,color,canvasRef,textBoxRef, textInputRef, setDisplayText,lastX,lastY,setProject,stack,setStack, setTop)}
                 onTouchMove={(e) => draw(e, isDrawing, canvasRef, color, shape, setCurrentX, setCurrentY, currentX, currentY, setElemArr, lastX, lastY, setLastX, setLastY)}
                 onTouchEnd={(e) => stopDrawing(e, canvasRef, setCursor, setIsDrawing, elemArr, color, shape, setElemArr, stack, setStack, setTop, setCurrentState, setProject)}
-                onMouseDown={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY,shape,color,canvasRef,textBoxRef, textInputRef, setDisplayText,lastX,lastY,setProject)}
+                onMouseDown={(e) => startDrawing(e, setIsDrawing, setCursor, setLastX, setLastY, setCurrentX, setCurrentY,shape,color,canvasRef,textBoxRef, textInputRef, setDisplayText,lastX,lastY,setProject,stack,setStack, setTop)}
                 onMouseMove={(e) => draw(e, isDrawing, canvasRef, color, shape, setCurrentX, setCurrentY, currentX, currentY, setElemArr, lastX, lastY, setLastX, setLastY)}
                 onMouseUp={(e) => stopDrawing(e, canvasRef, setCursor, setIsDrawing, elemArr, color, shape, setElemArr, stack, setStack, setTop, setCurrentState, setProject)}
                 ref={canvasRef}
