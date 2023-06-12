@@ -11,7 +11,8 @@ const blurListener = (
     color: string,
     setDisplayText: setStateString,
     x: number,
-    y: number
+    y: number,
+    setProject:(imgData: string) => Promise<void>
 ) => {
     const text = textInput.value;
     context.font = "bold 26px Indie Flower"
@@ -19,6 +20,8 @@ const blurListener = (
     context.fillText(text, x, y);
     setDisplayText("none")
     textInput.value = '';
+    const data = context.canvas.toDataURL()
+    setProject(data)
 }
 
 //function to start drawing
@@ -37,7 +40,8 @@ export const startDrawing = (
     textInputRef: textInputRef,
     setDisplayText: setStateString,
     lastX: number,
-    lastY: number
+    lastY: number,
+    setProject:(imgData: string) => Promise<void>
 
 ) => {
     console.log("touched")
@@ -79,8 +83,8 @@ export const startDrawing = (
                 if (textInput) {
                     console.log(textInput)
                     textInput.focus()
-                    textInput.addEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY) as any);
-                    textInput.removeEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY) as any)
+                    textInput.addEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY,setProject) as any);
+                    textInput.removeEventListener('blur', blurListener(textInput, context, color, setDisplayText, lastX, lastY,setProject) as any)
                 }
             }
             setIsDrawing(false)
