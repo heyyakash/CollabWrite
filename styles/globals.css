@@ -45,5 +45,27 @@ body{
 .absolute-center{
   @apply top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]
 }
-
+.hero-image{
+    @apply h-[190px] cursor-pointer background-animate hover:z-[1000] hover:border-[10px] hover:border-transparent bg-clip-border primary-gradient trans hover:scale-[1.5] absolute
+  }
+  .background-animate{
+    background-size: 200%;
+    -webkit-animation: gradient-animation 5s ease infinite;
+    -moz-animation: gradient-animation 5s ease infinite;
+    animation: gradient-animation 5s ease infinite;
+  }
 }
+
+
+@keyframes gradient-animation {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+

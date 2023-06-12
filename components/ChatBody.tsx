@@ -23,7 +23,7 @@ const ChatBody = ({chatList}:props) => {
         }
     ]
     const { data, isLoading } = useQuery<any>("userData", () => getClient(), {
-        onError: () => router.push("/")
+        onError: () => router.push("/login")
     })
 
     return (

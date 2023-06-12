@@ -40,7 +40,7 @@ const AddProject = ({ show, setShow }: propTypes) => {
 
     //get user data
     const { data, isLoading } = useQuery<any>("userData", () => getClient(), {
-        onError: () => router.push("/")
+        onError: () => router.push("/login")
     })
 
     const clearData = () => {

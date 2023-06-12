@@ -43,7 +43,7 @@ export default function MyModal({ isOpen, setIsOpen }: props) {
 
 
     const { data } = useQuery("userData", () => getClient(), {
-        onError: () => router.push("/"),
+        onError: () => router.push("/login"),
     })
 
     const handleSubmission = async () => {

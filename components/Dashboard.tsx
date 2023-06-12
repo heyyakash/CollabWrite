@@ -4,13 +4,14 @@ import React, { useState } from 'react'
 import { useQueries, useQuery, useQueryClient } from 'react-query'
 import DashboardNav from './DashboardNav'
 import Projects from './Projects'
-import {AiOutlineArrowRight} from 'react-icons/ai'
+import { AiOutlineArrowRight } from 'react-icons/ai'
 import getProjects from '@/helpers/db_functions'
 import AddProject from './AddProject'
 import getClient from '@/helpers/getUser'
 import getInitialClient from '@/helpers/getClient'
 import Loading from './Loading'
 import AddProjectModal from './AddProjectModal'
+import { error } from 'console'
 
 
 
@@ -22,18 +23,23 @@ const Dashboard = () => {
 
     const queryClient = useQueryClient()
     // const projects : any= queryClient.getQueryData("projects")
-    const {client, account, databases} = getInitialClient()
-    const [projectNumber,setProjectNumber] = useState<number>(0)
- 
+    const { client, account, databases } = getInitialClient()
+    const [projectNumber, setProjectNumber] = useState<number>(0)
+
     //get user data
-    const { data, isLoading } = useQuery<any>("userData", ()=>getClient(), {
-        onError: () => router.push("/"),
-        onSuccess:async (data) => {
-            const res  = await getProjects(databases, data["$id"])
-            setProjectNumber(res.length)
+    const { data, isError, isLoading } = useQuery<any>("userData", () => getClient(), {
+        onError: () => router.push("/login"),
+        onSuccess: async (data) => {
+            if (data!=="undefined") {
+                console.log(data)
+                const res = await getProjects(databases, data["$id"])
+                setProjectNumber(res.length)
+            }
+            
         }
     })
-    
+
+
 
 
     if (isLoading) {
@@ -50,17 +56,17 @@ const Dashboard = () => {
             <DashboardNav />
             <section className='max-w-[1200px] w-full min-h-screen relative mx-auto pt-[120px] px-5 xl:px-0 '>
                 <div className='flex flex-col md:flex-row items-center justify-between gap-10 xl:gap-none'>
-                    <div className='xl:p-6 first:col-span-2'><span className='text-xl leading-2 font-semibold text-white/70 bg-clip-text primary-gradient text-transparent'>Hello</span><span className='text-white text-[3rem] font-semibold block'>{data.name} 👋</span></div>
+                    <div className='xl:p-6 first:col-span-2'><span className='text-xl leading-2 font-semibold text-white/70 bg-clip-text primary-gradient text-transparent'>Hello</span><span className='text-white text-[3rem] font-semibold block'>{data?.name} 👋</span></div>
                     <div className="flex items-center justify-center w-full md:w-[300px]  h-[130px] rounded-lg primary-gradient">
                         <p className='text-[3rem] font-semibold  text-black'>{projectNumber}<span className='text-sm'>Projects</span></p>
                     </div>
-    
+
                 </div>
-       
-                <Projects show = {isOpen} setShow = {setIsOpen} />
+
+                <Projects show={isOpen} setShow={setIsOpen} />
                 {/* <AddProject show = {show} setShow = {setShow} /> */}
-                <AddProjectModal setIsOpen={setIsOpen} isOpen = {isOpen}/>
-  
+                <AddProjectModal setIsOpen={setIsOpen} isOpen={isOpen} />
+
             </section>
         </main>
     )

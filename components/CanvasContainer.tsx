@@ -24,7 +24,7 @@ const CanvasContainer = ({id}:props) => {
     })
 
     const { data } = useQuery<any>("userData", () => getClient(), {
-        onError: () => router.push("/"),
+        onError: () => router.push("/login"),
     })
 
 
