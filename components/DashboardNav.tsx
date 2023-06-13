@@ -85,13 +85,13 @@ const NotificationBox = ({ data }: any) => {
     const userData:any = queryClient.getQueryData("userData")
     const {databases} = getInitialClient()
     const deleteInvitaion = (id: string) => {
-        databases.deleteDocument("6475e4e81155c46f87b6", "6475fafb1adfd9a909c5", id).then((e) => queryClient.invalidateQueries("invitations"))
+        databases.deleteDocument(process.env.NEXT_PUBLIC_APPWRITE_DB as string, "6475fafb1adfd9a909c5", id).then((e) => queryClient.invalidateQueries("invitations"))
     }
 
     const acceptInvitation = async (id: string, invitation_id: string,useremail:string) => {
-        databases.getDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id).then((d) => {
+        databases.getDocument(process.env.NEXT_PUBLIC_APPWRITE_DB as string, process.env.NEXT_PUBLIC_APPWRITE_DB_PROJECTS_COLLN as string, id).then((d) => {
             const arr = [...d.users, userData["$id"]]
-            databases.updateDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", id, {
+            databases.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB as string, process.env.NEXT_PUBLIC_APPWRITE_DB_PROJECTS_COLLN as string, id, {
                 users: arr
             }).then(e => {
                 deleteInvitaion(invitation_id)

@@ -52,7 +52,7 @@ const AddProject = ({ show, setShow }: propTypes) => {
 
     const searchUser = (email: string) => {
         setInput(email)
-        databases.listDocuments("6475e4e81155c46f87b6", "6475e4fa4c0ac8bdb6cc", [Query.search("email", email)])
+        databases.listDocuments(process.env.NEXT_PUBLIC_APPWRITE_DB as string, process.env.NEXT_PUBLIC_APPWRITE_DB_USERS_COLLN as string, [Query.search("email", email)])
             .then(d => setSearchResult(d.documents))
             .catch(err => console.log(err))
     }
@@ -60,13 +60,13 @@ const AddProject = ({ show, setShow }: propTypes) => {
     const addProject = () => {
         if (projectName.length > 0) {
             const project_id = ID.unique()
-            databases.createDocument("6475e4e81155c46f87b6", "6475f82bb6f201570328", project_id, {
+            databases.createDocument(process.env.NEXT_PUBLIC_APPWRITE_DB as string, process.env.NEXT_PUBLIC_APPWRITE_DB_PROJECTS_COLLN as string, project_id, {
                 admin: data?.email,
                 users: [data["$id"]],
                 name: projectName
             })
                 .then(d => {
-                    databases.createDocument("6475e4e81155c46f87b6", process.env.NEXT_PUBLIC_APPWRITE_DB_CHATS as string, ID.unique(), {
+                    databases.createDocument(process.env.NEXT_PUBLIC_APPWRITE_DB as string, process.env.NEXT_PUBLIC_APPWRITE_DB_CHATS as string, ID.unique(), {
                         project_id : d["$id"]
                     })
                     queryClient.invalidateQueries("projects")
@@ -77,7 +77,7 @@ const AddProject = ({ show, setShow }: propTypes) => {
     }
 
     const sendInvitation = (email: string, name: string) => {
-        databases.createDocument("6475e4e81155c46f87b6", "6475fafb1adfd9a909c5", ID.unique(), {
+        databases.createDocument(process.env.NEXT_PUBLIC_APPWRITE_DB as string, "6475fafb1adfd9a909c5", ID.unique(), {
             from: data?.email,
             to: email,
             from_name: data?.name,
